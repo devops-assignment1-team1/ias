@@ -3,7 +3,7 @@ on:
   push:
     paths:
       - "database/**"
-      - ".github/workflows/sql-review.sql"
+      - ".github/workflows/sql-review.yml"
 
 jobs:
   sql-review:
