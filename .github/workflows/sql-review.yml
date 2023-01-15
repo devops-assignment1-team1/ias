@@ -1,8 +1,5 @@
 name: SQL Review
 on:
-  pull_request:
-    paths:
-      - "database/**"
   push:
     paths:
       - "database/**"
