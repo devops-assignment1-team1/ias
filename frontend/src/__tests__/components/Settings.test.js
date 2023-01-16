@@ -22,4 +22,30 @@ test('Render save changes button', async () => {
   expect(saveBtn).toHaveTextContent('SAVE CHANGES');
 })
 
+test('Render email directory header', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+  
+    // ASSERT
+    const emailHeader = screen.container.querySelector('#email-dir-header');
+    expect(emailHeader).toHaveTextContent('Email Directory');
+  })
+  
+  test('Render resume directory header', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+  
+    // ASSERT
+    const resumeHeader = screen.container.querySelector('#resume-dir-header');
+    expect(resumeHeader).toHaveTextContent('Resume Directory');
+  })
+  test('Render internship period header', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+  
+    // ASSERT
+    const internshipHeader = screen.container.querySelector('#internship-header');
+    expect(internshipHeader).toHaveTextContent('Internship Period');
+  })
+  
 // //TODO:: Functional tests
