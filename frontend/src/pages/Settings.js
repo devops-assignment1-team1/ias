@@ -16,6 +16,11 @@ function Settings() {
                     <Title>Settings</Title>
                     <p>Make changes to file directories of emails and resumes.</p>
                 </div>
+
+                {/* Save Changes */}
+                <div className="col justify-content-center align-self-center" style={{textAlign:"end", paddingRight:"50px" }}>
+                    <Button id="save-btn" variant="dark" style={{padding:"15px 30px"}}>SAVE CHANGES</Button>
+                </div>
             </div>
             <hr />
         </div>
