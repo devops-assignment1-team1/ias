@@ -23,6 +23,18 @@ function Settings() {
                 </div>
             </div>
             <hr />
+
+            {/* Email directory */}
+            <h2 id="email-dir-header" style={{paddingTop:"20px" ,fontFamily: "var(--secondary-font)", fontSize: "20px"}}>Email Directory</h2>
+            <hr />
+
+            {/* Resume directory */}
+            <h2 id="resume-dir-header" style={{paddingTop:"20px" ,fontFamily: "var(--secondary-font)", fontSize: "20px"}}>Resume Directory</h2>
+            <hr />
+
+            {/* Internship period */}
+            <h2 id="internship-header" style={{paddingTop:"20px" ,fontFamily: "var(--secondary-font)", fontSize: "20px"}}>Internship Period</h2>
+            <hr />
         </div>
     )
 }
