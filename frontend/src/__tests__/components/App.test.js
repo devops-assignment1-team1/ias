@@ -16,4 +16,16 @@ test('Render footer', async () => {
   expect(footer).toHaveTextContent('IAS 2023');
 })
 
+test('Render navbar', async () => {
+  // ARRANGE
+  const screen = render(<MemoryRouter> initialEntries={['/Main']}
+    <App />
+    </MemoryRouter>);
 
+  // ASSERT
+  const navBarLogo = screen.container.querySelector('.navbar-brand');
+  expect(navBarLogo).toHaveTextContent("IAS");
+  const navLinks = screen.container.querySelector('.navbar-nav');
+  expect(navLinks.childElementCount).toEqual(4);
+  expect(navLinks).toHaveTextContent("UPLOAD MATCH STUDENTS PREPARE EMAILS SETTINGS")
+})
