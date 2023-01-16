@@ -10,7 +10,7 @@ import Settings from './pages/Settings'
 import NavBar from './components/NavBar/NavBar';
 
 // Import React Router 
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   return (
