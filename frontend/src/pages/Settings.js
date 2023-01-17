@@ -18,6 +18,7 @@ import {
 import "../components/Settings/Settings.css"
 
 function Settings() {
+    
     // States
     const [show, setShow] = useState(false); // date picker modal show
     const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
@@ -29,8 +30,67 @@ function Settings() {
     const [internshipPeriod , setInternshipPeriod] = useState("DD/MM/YYYY - DD/MM/YYYY");
     const [emailPath, setEmailPath] = useState("File Directory");
     const [resumePath, setResumePath] = useState("File Directory");
+    const [isLoading, setLoading] = useState(true);
 
-        // Internship period modal show/hide handler +
+    // useEffect(() => {
+    //     var myHeaders = new Headers();
+    //     myHeaders.append("Content-Type", "application/json");
+
+    //     var requestOptions = {
+    //       method: 'GET',
+    //       headers: myHeaders,
+    //       redirect: 'follow'
+    //     };
+        
+    //     fetch("http://localhost:5222/api/v1/settings", requestOptions)
+    //       .then(response => response.text())
+    //       .then(result => {
+    //             result.forEach(type => {
+    //                 if(type.setting_type == "EMAIL_DIRECTORY"){
+    //                     setEmailPath(type.setting_value)
+    //                 }
+    //                 if(type.setting_type == "RESUME_DIRECTORY"){
+    //                     setResumePath(type.setting_value)
+    //                 }
+    //                 if(type.setting_type == "INTERNSHIP_PERIOD"){
+    //                     setInternshipPeriod(type.setting_value)
+    //                 }
+    //             })
+    //             setLoading(false);
+    //         })
+    //       .catch(error => toast.error("Error getting data"));
+    // }, [])
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+
+    fetch(PORT + "/api/v1/settings", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            console.log("HERE")
+            result.forEach(type => {
+                if(type.setting_type == "EMAIL_DIRECTORY"){
+                    console.log("HERE2")
+                    setEmailPath(type.setting_value)
+                }
+                if(type.setting_type == "RESUME_DIRECTORY"){
+                    setResumePath(type.setting_value)
+                }
+                if(type.setting_type == "INTERNSHIP_PERIOD"){
+                    setInternshipPeriod(type.setting_value)
+                }
+            })
+            setLoading(false);
+        })
+        .catch(error => toast.error("Error getting data"));
+
+    // Internship period modal show/hide handler +
     // Internship Period text update
     const handleShow = () => setShow(true);
     const handleClose = () => {
@@ -92,6 +152,9 @@ function Settings() {
         handleDisabledSave();
     }, [internshipPeriod, emailPath, resumePath]);
 
+    if (isLoading) {
+        return <div style={{ marginLeft: "20px" , marginTop:"100px"}}>Fetching Data...</div>;
+    }
     return (
         <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial"}} className="container-fluid m-0">
             <div className="row">
