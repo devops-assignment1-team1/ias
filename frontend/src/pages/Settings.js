@@ -18,10 +18,79 @@ import {
 import "../components/Settings/Settings.css"
 
 function Settings() {
+    // States
+    const [show, setShow] = useState(false); // date picker modal show
+    const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
+    const [showResumeDir, setShowResumeDir] = useState(false); // input modal show
+    const [value, setValue] = useState(new Date()); // date value
+    const [isDisabled, setDisabled] = useState(true); // save changes
+
     // Init states for texts
     const [internshipPeriod , setInternshipPeriod] = useState("DD/MM/YYYY - DD/MM/YYYY");
     const [emailPath, setEmailPath] = useState("File Directory");
     const [resumePath, setResumePath] = useState("File Directory");
+
+        // Internship period modal show/hide handler +
+    // Internship Period text update
+    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+
+        if(value.length === 2){
+            const start = value[0];
+            const end = value[1];
+            
+            // Start date
+            const dayStart = String(start.day).length === 1 ? "0" + String(start.day) : String(start.day);
+            const monthStart = String(start.month.index + 1).length === 1 ? "0" + String(start.month.index + 1) : String(start.month.index + 1);
+            const startStr = dayStart + "/" + monthStart + "/" + String(start.year);
+
+            // End date
+            const dayEnd = String(end.day).length === 1 ? "0" + String(end.day) : String(end.day);
+            const monthEnd = String(end.month.index + 1).length === 1 ? "0" + String(end.month.index + 1) : String(end.month.index + 1);
+            const endStr = dayEnd + "/" + monthEnd + "/" + String(end.year);
+            setInternshipPeriod(startStr + " - " + endStr);
+        };
+    };
+
+    // Email directory show/hide handler +
+    // Email directory  text update
+    const handleEmailClick = () => setShowEmailDir(true);
+    const handleCloseEmailDir = () => {
+        setShowEmailDir(false);
+        setEmailPath(document.getElementById("email-dir").value);
+    };
+
+    // Resume directory show/hide handler +
+    // Resume directory  text update
+    const handleResumeClick = () => setShowResumeDir(true);
+    const handleCloseResumeDir = () => {
+        setShowResumeDir(false);
+        setResumePath(document.getElementById("resume-dir").value);
+    };
+
+    // Toast, reset states, upsert data
+    function handleSave(){
+        setInternshipPeriod("DD/MM/YYYY - DD/MM/YYYY");
+        setEmailPath("File Directory");
+        setResumePath("File Directory");
+
+        // upsert data
+    }
+
+    // Disabled state 
+    useEffect(() => {
+        const handleDisabledSave = () => {
+            if(internshipPeriod === "DD/MM/YYYY - DD/MM/YYYY" || internshipPeriod === "" ||
+                emailPath === "File Directory" || emailPath === "" || 
+                resumePath === "File Directory" || resumePath === ""){
+                    setDisabled(true);
+            }else{
+                setDisabled(false);
+            }
+        }
+        handleDisabledSave();
+    }, [internshipPeriod, emailPath, resumePath]);
 
     return (
         <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial"}} className="container-fluid m-0">
@@ -51,7 +120,7 @@ function Settings() {
                     
                     {/* Button to Upload */}
                     <div className="col-2 justify-content-center align-self-center">
-                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}} >UPDATE DIRECTORY</Button>
+                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}} data-testid="email-dir-button" onClick={handleEmailClick}>UPDATE DIRECTORY</Button>
                     </div>
                 </div>
             </div>
@@ -68,7 +137,7 @@ function Settings() {
                     
                     {/* Button to Upload */}
                     <div className="col-2 justify-content-center align-self-center">
-                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}} >UPDATE DIRECTORY</Button>
+                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}}  data-testid="resume-dir-button" onClick={handleResumeClick}>UPDATE DIRECTORY</Button>
                     </div>
                 </div>
             </div>
@@ -85,10 +154,76 @@ function Settings() {
                     
                     {/* Button to Upload */}
                     <div className="col-2 justify-content-center align-self-center">
-                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}}>UPDATE PERIOD</Button>
+                        <Button variant="dark" style={{padding:"15px", width:"-webkit-fill-available"}}  data-testid="update-period-button" onClick={handleShow}>UPDATE PERIOD</Button>
                     </div>  
                 </div>
             </div>
+
+            {/* Internship period date picker modal */}
+            <Modal show={show} onHide={handleClose}>
+                {/* Header with close button */}
+                <Modal.Header closeButton>
+                    <Modal.Title>Select Internship Date Range</Modal.Title>
+                </Modal.Header>
+
+                {/* Body with date picker */}
+                <Modal.Body>
+                    <Calendar range minDate={new Date()} numberOfMonths={2} value={value} onChange={setValue}/>
+                </Modal.Body>
+
+                {/* Confirm selection button */}
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        CONFIRM
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Email directory modal */}
+            <Modal show={showEmailDir} onHide={handleCloseEmailDir}>
+                {/* Header with close button */}
+                <Modal.Header closeButton>
+                    <Modal.Title>Enter Directory</Modal.Title>
+                </Modal.Header>
+
+                {/* Body with input */}
+                <Modal.Body>
+                    <Form.Control
+                        type="text"
+                        id = "email-dir"
+                    />
+                </Modal.Body>
+
+                {/* Confirm selection button */}
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseEmailDir}>
+                        CONFIRM
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Resume directory modal */}
+            <Modal show={showResumeDir} onHide={handleCloseResumeDir}>
+                {/* Header with close button */}
+                <Modal.Header closeButton>
+                    <Modal.Title>Enter Directory</Modal.Title>
+                </Modal.Header>
+
+                {/* Body with input */}
+                <Modal.Body>
+                    <Form.Control
+                        type="text"
+                        id = "resume-dir"
+                    />
+                </Modal.Body>
+
+                {/* Confirm selection button */}
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseResumeDir}>
+                        CONFIRM
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }
