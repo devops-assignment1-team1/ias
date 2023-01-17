@@ -151,7 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     name: SonarCloud
     # needs: [frontend-review, backend-review]
-    needs: [frontend-review]
+    needs: [frontend-review, sql-review]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -162,11 +162,11 @@ jobs:
         with:
           name: frontend_coverage
           path: coverage/frontend.info
-      - name: Download Backend Coverage Test
-        uses: actions/download-artifact@v3
-        with:
-          name: backend_coverage
-          path: coverage/backend.info
+      # - name: Download Backend Coverage Test
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: backend_coverage
+      #     path: coverage/backend.info
       - run: ls
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
