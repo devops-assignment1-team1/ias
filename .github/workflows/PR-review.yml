@@ -167,7 +167,7 @@ jobs:
       #   with:
       #     name: backend_coverage
       #     path: coverage/backend.info
-      - run: ls
+      - run: ls coverage
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
