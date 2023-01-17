@@ -161,13 +161,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: frontend_coverage
-          path: coverage/lcov.info
+          path: frontend/coverage/lcov.info
       # - name: Download Backend Coverage Test
       #   uses: actions/download-artifact@v3
       #   with:
       #     name: backend_coverage
       #     path: coverage/backend.info
-      - run: ls coverage
+      - run: ls frontend/coverage
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
