@@ -157,11 +157,11 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: Download Frontend Coverage Test
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend_coverage
-          path: frontend/coverage
+      # - name: Download Frontend Coverage Test
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: frontend_coverage
+      #     path: frontend/coverage
       # - name: Use Node.js v16.13.1
       #   uses: actions/setup-node@v3
       #   with:
