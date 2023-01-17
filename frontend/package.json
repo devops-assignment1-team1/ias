@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@testing-library/user-event": "^14.4.3",
-    "jest-watch-typeahead": "^0.6.5"
+    "jest-watch-typeahead": "^0.6.5",
+    "nock": "^13.3.0"
   }
 }
