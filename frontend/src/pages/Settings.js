@@ -103,7 +103,7 @@ function Settings() {
 
                 {/* Save Changes */}
                 <div className="col justify-content-center align-self-center" style={{textAlign:"end", paddingRight:"50px" }}>
-                    <Button id="save-btn" variant="dark" style={{padding:"15px 30px"}}>SAVE CHANGES</Button>
+                    <Button id="save-btn" variant="dark" style={{padding:"15px 30px"}} disabled={isDisabled} onClick={handleSave}>SAVE CHANGES</Button>
                 </div>
             </div>
             <hr />
@@ -173,7 +173,7 @@ function Settings() {
 
                 {/* Confirm selection button */}
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleClose} data-testid="confirm-internship-period">
                         CONFIRM
                     </Button>
                 </Modal.Footer>
@@ -191,12 +191,13 @@ function Settings() {
                     <Form.Control
                         type="text"
                         id = "email-dir"
+                        data-testid="email-dir"
                     />
                 </Modal.Body>
 
                 {/* Confirm selection button */}
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleCloseEmailDir}>
+                    <Button variant="primary" onClick={handleCloseEmailDir} data-testid="confirm-email-dir">
                         CONFIRM
                     </Button>
                 </Modal.Footer>
@@ -214,12 +215,13 @@ function Settings() {
                     <Form.Control
                         type="text"
                         id = "resume-dir"
+                        data-testid="resume-dir"
                     />
                 </Modal.Body>
 
                 {/* Confirm selection button */}
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleCloseResumeDir}>
+                    <Button variant="primary" onClick={handleCloseResumeDir} data-testid="confirm-resume-dir">
                         CONFIRM
                     </Button>
                 </Modal.Footer>
