@@ -38,7 +38,7 @@ jobs:
         if: always()
         with:
           name: frontend_coverage
-          path: frontend/coverage/lcov.info
+          path: frontend/coverage
       - name: send telegram message if fail
         uses: appleboy/telegram-action@master
         if: failure()
@@ -85,7 +85,7 @@ jobs:
   #       if: always()
   #       with:
   #         name: backend_coverage
-  #         path: backend/coverage/lcov.info
+  #         path: backend/coverage
   # - name: send telegram message if fail
   #   uses: appleboy/telegram-action@master
   #   if: failure()
@@ -161,12 +161,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: frontend_coverage
-          path: frontend/coverage/lcov.info
+          path: frontend/coverage
       # - name: Download Backend Coverage Test
       #   uses: actions/download-artifact@v3
       #   with:
       #     name: backend_coverage
-      #     path: coverage/backend.info
+      #     path: coverage/coverage
       - run: ls frontend/coverage
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
