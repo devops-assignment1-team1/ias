@@ -161,7 +161,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: frontend_coverage
-          path: coverage/frontend.info
+          path: coverage/lcov.info
       # - name: Download Backend Coverage Test
       #   uses: actions/download-artifact@v3
       #   with:
