@@ -95,6 +95,10 @@ test('Render email directory header', async () => {
     fireEvent.click(emailDirectoryUpdateButton)
     const emailDirectoryModal = screen.getByText('Enter Directory')
     expect(emailDirectoryModal).toBeVisible()
+    const confirmButton = screen.getByRole('button',{name:'CONFIRM'})
+    expect(confirmButton).toBeVisible()
+    const input = screen.getByRole('textbox')
+    expect(input).toBeVisible()
   })
   
   test('Render resume directory modal', async () => {
@@ -106,6 +110,10 @@ test('Render email directory header', async () => {
     fireEvent.click(resumeDirectoryUpdateButton)
     const resumeDirectoryModal = screen.getByText('Enter Directory')
     expect(resumeDirectoryModal).toBeVisible()
+    const confirmButton = screen.getByRole('button',{name:'CONFIRM'})
+    expect(confirmButton).toBeVisible()
+    const input = screen.getByRole('textbox')
+    expect(input).toBeVisible()
   })
 
   test('Render internship period directory modal', async () => {
@@ -117,6 +125,47 @@ test('Render email directory header', async () => {
     fireEvent.click(intPeriodUpdateButton)
     const internshipPeriodField = screen.getByText('Select Internship Date Range')
     expect(internshipPeriodField).toBeVisible()
+    const confirmButton = screen.getByRole('button',{name:'CONFIRM'})
+    expect(confirmButton).toBeVisible()
+    const input = screen.getAllByText('Sun')
+    expect(input.length).toBe(2)
   })
+
+  test('Save changes button state', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+
+    // ASSERT
+    const saveBtn = screen.container.querySelector('#save-btn');
+    expect(saveBtn).toBeDisabled();
+
+    const intPeriodUpdateButton = screen.getByTestId('update-period-button')
+    fireEvent.click(intPeriodUpdateButton)
+    const dateStart = screen.getAllByText('1')[0];
+    const dateEnd = screen.getAllByText('31')[0];
+    fireEvent.click(dateStart)
+    fireEvent.click(dateEnd)
+    const intConfirmButton = screen.getByTestId('confirm-internship-period')
+    fireEvent.click(intConfirmButton)
+    
+    const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
+    fireEvent.click(emailDirectoryUpdateButton)
+    const emailInput = screen.getByTestId('email-dir')
+    fireEvent.click(emailInput)
+    fireEvent.change(emailInput, {target: {value: 'asdasdasd'}})
+    const emailConfirmButton = screen.getByTestId('confirm-email-dir')
+    fireEvent.click(emailConfirmButton)
+
+    const resumeDirectoryUpdateButton = screen.getByTestId('resume-dir-button')
+    fireEvent.click(resumeDirectoryUpdateButton)
+    const resumeInput = screen.getByTestId('resume-dir')
+    fireEvent.click(resumeInput)
+    fireEvent.change(resumeInput, {target: {value: 'asdasdasd'}})
+    const resumeConfirmButton = screen.getByTestId('confirm-resume-dir')
+    fireEvent.click(resumeConfirmButton)
+
+    expect(saveBtn).toBeEnabled();
+  })
+  
 
 // //TODO:: Functional tests
