@@ -161,12 +161,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: frontend_coverage
-          path: coverage
+          path: coverage/frontend.info
       - name: Download Backend Coverage Test
         uses: actions/download-artifact@v3
         with:
           name: backend_coverage
-          path: coverage
+          path: coverage/backend.info
       - run: ls
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
@@ -190,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Integration Test
     # needs: [sql-review, frontend-review, backend-review, sonarcloud]
-    needs: [sql-review, frontend-review, sonarcloud]
+    needs: [sonarcloud]
     steps:
       - uses: actions/checkout@v3
   send-email:
