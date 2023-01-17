@@ -16,7 +16,7 @@ app.get('/api/v1', (req, res) => {
 const settingsRouter = require('./routes/settings/GET');
 app.use('/api/v1/settings', settingsRouter);
 
-const upsertSettingsRouter = require('./routes/settings/PUT');
+const upsertSettingsRouter = require('./routes/settings/POST');
 app.use('/api/v1/settings', upsertSettingsRouter);
 
 app.listen(port, () => {
