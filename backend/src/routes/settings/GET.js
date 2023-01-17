@@ -1,6 +1,7 @@
 const con = require("../../db");
-const returnSuccess = require("../../utils");
-const returnError = require("../../utils");
+const utils = require("../../utils");
+const returnSuccess = utils.returnSuccess;
+const returnError = utils.returnError;
 const express = require("express");
 const router = express.Router();
 
