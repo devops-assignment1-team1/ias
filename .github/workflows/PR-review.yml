@@ -155,6 +155,17 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
+      - name: Download Frontend Coverage Test
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend_coverage
+          path: coverage
+      - name: Download Backend Coverage Test
+        uses: actions/download-artifact@v3
+        with:
+          name: backend_coverage
+          path: coverage
+      - run: ls
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
