@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Settings from '../../pages/Settings';
 import { Button } from 'bootstrap';
@@ -84,6 +84,39 @@ test('Render email directory header', async () => {
     // ASSERT
     const updatePeriodButton = screen.getByRole('button',{name:'UPDATE PERIOD'})
     expect(updatePeriodButton).toBeVisible()
+  })
+
+  test('Render email directory modal', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+
+    // ASSERT
+    const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
+    fireEvent.click(emailDirectoryUpdateButton)
+    const emailDirectoryModal = screen.getByText('Enter Directory')
+    expect(emailDirectoryModal).toBeVisible()
+  })
+  
+  test('Render resume directory modal', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+
+    // ASSERT
+    const resumeDirectoryUpdateButton = screen.getByTestId('resume-dir-button')
+    fireEvent.click(resumeDirectoryUpdateButton)
+    const resumeDirectoryModal = screen.getByText('Enter Directory')
+    expect(resumeDirectoryModal).toBeVisible()
+  })
+
+  test('Render internship period directory modal', async () => {
+    // ARRANGE
+    const screen = render(<Settings />);
+
+    // ASSERT
+    const intPeriodUpdateButton = screen.getByTestId('update-period-button')
+    fireEvent.click(intPeriodUpdateButton)
+    const internshipPeriodField = screen.getByText('Select Internship Date Range')
+    expect(internshipPeriodField).toBeVisible()
   })
 
 // //TODO:: Functional tests
