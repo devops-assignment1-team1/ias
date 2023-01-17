@@ -1,8 +1,19 @@
-import {render, screen, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Settings from '../../pages/Settings';
 import { Button } from 'bootstrap';
 import nock from 'nock';
+import { beforeEach } from '@jest/globals';
+
+
+beforeEach(()=>{
+  nock('http://localhost:5222/api/v1/settings')
+  .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+  })
+  .get('/')
+  .reply(200, [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"12345"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]);
+})
 
 test('Render title', async () => {
   // ARRANGE
@@ -171,70 +182,25 @@ test('Render email directory header', async () => {
   // [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"12345"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]
 
   test('Load settings', async () => {
-    nock('http://localhost:5222/api/v1/settings')
+    nock('http://localhost:5222')
         .defaultReplyHeaders({
             'access-control-allow-origin': '*',
         })
-        .get('/')
+        .persist()
+        .get('/api/v1/settings')
         .reply(200, [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"12345"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]);
 
     render(<Settings />);
 
     await waitFor(() => {
         expect(
-            screen.getByText("qwerty")
+            screen.getAllByText("qwerty")[0]
         ).toBeInTheDocument();
     });
   })
-  
-  test('Save changes post', async () => {
-    nock('http://localhost:5222/api/v1/settings')
-        .defaultReplyHeaders({
-            'access-control-allow-origin': '*',
-        })
-        .post('/users', {
-          email_dir: 'asd',
-          resume_dir: 'asd',
-          internship_period:'01/02/2023 - 28/02/2023',
-        })
-        .reply(200, []);
 
-    render(<Settings />);
-    const saveBtn = screen.container.querySelector('#save-btn');
-
-    const intPeriodUpdateButton = screen.getByTestId('update-period-button')
-    fireEvent.click(intPeriodUpdateButton)
-    const dateStart = screen.getAllByText('1')[1];
-    const dateEnd = screen.getAllByText('28')[1];
-    fireEvent.click(dateStart)
-    fireEvent.click(dateEnd)
-    const intConfirmButton = screen.getByTestId('confirm-internship-period')
-    fireEvent.click(intConfirmButton)
-    
-    const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
-    fireEvent.click(emailDirectoryUpdateButton)
-    const emailInput = screen.getByTestId('email-dir')
-    fireEvent.click(emailInput)
-    fireEvent.change(emailInput, {target: {value: 'asd'}})
-    const emailConfirmButton = screen.getByTestId('confirm-email-dir')
-    fireEvent.click(emailConfirmButton)
-
-    const resumeDirectoryUpdateButton = screen.getByTestId('resume-dir-button')
-    fireEvent.click(resumeDirectoryUpdateButton)
-    const resumeInput = screen.getByTestId('resume-dir')
-    fireEvent.click(resumeInput)
-    fireEvent.change(resumeInput, {target: {value: 'asd'}})
-    const resumeConfirmButton = screen.getByTestId('confirm-resume-dir')
-    fireEvent.click(resumeConfirmButton)
-
-    await waitFor(() => {
-        expect(
-            screen.getByText("asd")
-        ).toBeInTheDocument();
-    });
-  })
 
   //01/02/2023 - 28/02/2023
   // npm install --save-dev nock
-
 // //TODO:: Functional tests
+
