@@ -150,6 +150,8 @@ jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     name: SonarCloud
+    # needs: [frontend-review, backend-review]
+    needs: [frontend-review]
     steps:
       - uses: actions/checkout@v2
         with:
