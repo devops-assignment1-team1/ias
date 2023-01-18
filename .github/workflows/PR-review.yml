@@ -165,7 +165,7 @@ jobs:
       - name: Download Backend Unit Test Result
         uses: actions/download-artifact@v3
         with:
-          name: backendend_test_report
+          name: backend_test_report
           path: frontend/junit.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
