@@ -157,6 +157,7 @@ jobs:
     needs: [frontend-review, backend-review, sql-review]
     if: always()
     steps:
+      - uses: actions/checkout@v3
       - name: Download Frontend Unit Test Result
         uses: actions/download-artifact@v3
         with:
