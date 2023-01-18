@@ -22,11 +22,6 @@ jobs:
         run: |
           cd frontend
           npm test
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
-        if: always()
-        with:
-          junit_files: "frontend/junit.xml"
       - name: Upload Test Report Artifect
         uses: actions/upload-artifact@v3
         if: always()
@@ -83,11 +78,6 @@ jobs:
         run: |
           cd backend
           npm test
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
-        if: always()
-        with:
-          junit_files: "backend/junit.xml"
       - name: Upload Artifect
         uses: actions/upload-artifact@v3
         if: always()
@@ -161,6 +151,27 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+  publish-unit-test:
+    runs-on: ubuntu-latest
+    name: Publish Unit Test Result
+    needs: [frontend-review, backend-review, sql-review]
+    if: always()
+    steps:
+      - name: Download Frontend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend_test_report
+          path: frontend/junit.xml
+      - name: Download Backend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: backendend_test_report
+          path: frontend/junit.xml
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          junit_files: "**/junit.xml"
   sonarcloud:
     runs-on: ubuntu-latest
     name: SonarCloud
@@ -170,12 +181,12 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: Download Frontend Coverage Test
+      - name: Download Frontend Coverage Test Result
         uses: actions/download-artifact@v3
         with:
           name: frontend_coverage
           path: frontend/coverage
-      - name: Download Backend Coverage Test
+      - name: Download Backend Coverage Test Result
         uses: actions/download-artifact@v3
         with:
           name: backend_coverage
