@@ -167,6 +167,7 @@ jobs:
         with:
           name: backend_test_report
           path: backend/junit.xml
+      - run: ls
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
