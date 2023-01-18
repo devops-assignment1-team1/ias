@@ -166,7 +166,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: backend_test_report
-          path: frontend/junit.xml
+          path: backend/junit.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
