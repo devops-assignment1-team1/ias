@@ -172,6 +172,8 @@ jobs:
           ls
           ls frontend
           ls backend
+          cat frontend/junit.xml
+          cat backend/junit.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
