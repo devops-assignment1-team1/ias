@@ -172,6 +172,8 @@ jobs:
           ls
           ls frontend
           ls backend
+          ls frontend/junit.xml
+          ls backend/junit.xml
           cat frontend/junit.xml
           cat backend/junit.xml
       - name: Publish Test Results
