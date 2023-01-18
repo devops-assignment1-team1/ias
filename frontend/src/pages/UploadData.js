@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PORT from "../conn";
 
 // Import components
 import toast from "react-hot-toast";
@@ -22,7 +23,7 @@ function UploadData() {
 		studentFormData.append(key, event);
 		setStudentFormData(studentFormData);
 		setStudentFileName(event.name);
-		//handleStudentSave();
+		handleStudentSave();
 		handleCloseStudentFile();
 	};
 
@@ -30,7 +31,7 @@ function UploadData() {
 		companyFormData.append(key, event);
 		setCompanyFormData(companyFormData);
 		setCompanyFileName(event.name);
-		//handleCompanySave();
+		handleCompanySave();
 		handleCloseCompanyFile();
 	};
 
@@ -43,6 +44,25 @@ function UploadData() {
 
 	const [data, setData] = useState(null);
 	const [internshipPeriod, setInternshipPeriod] = useState(null);
+
+	// get internship period to display
+	React.useEffect(() => {
+		fetch(PORT + "/api/v1/settings")
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(response.statusText);
+				}
+				return response.json();
+			})
+			.then((data) => {
+				if (data && data.length > 0) {
+					setData(data);
+					const internshipPeriod = data.filter((setting) => setting.setting_type === "INTERNSHIP_PERIOD")[0].setting_value;
+					setInternshipPeriod(internshipPeriod);
+				}
+			})
+			.catch((error) => console.log(error));
+	}, []);
 
 	const handleConfirmStudentFile = (event) => {
 		var input = document.getElementById("StudentUploadFile");
@@ -79,6 +99,40 @@ function UploadData() {
 		setShowCompanyFile(false);
 	};
 
+	async function handleStudentSave() {
+		const studentRequestOptions = {
+			method: "POST",
+			body: studentFormData,
+			headers: {
+				"Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryGVn59QTi5BpftPIp",
+			},
+			redirect: "follow",
+		};
+
+		// upload student data
+		fetch(PORT + "/api/v1/students/upload", studentRequestOptions)
+			.then((response) => response.text())
+			.then((result) => toast.success("Success updating student data"))
+			.catch((error) => toast.error("Failed updating student data"));
+	}
+
+	async function handleCompanySave() {
+		var companyRequestOptions = {
+			method: "POST",
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+			body: companyFormData,
+			redirect: "follow",
+		};
+
+		// upload company data
+		fetch(PORT + "/api/v1/companies/upload", companyRequestOptions)
+			.then((response) => response.text())
+			.then((result) => toast.success("Success updating company data"))
+			.catch((error) => toast.error("Failed updating company data"));
+	}
+
 	return (
 		<div style={{ paddingTop: "80px", paddingLeft: "50px", textAlign: "initial" }} className="container-fluid m-0">
 			<div className="row">
@@ -86,6 +140,7 @@ function UploadData() {
 				<div className="col">
 					<Title>Upload Data</Title>
 					<p>Upload the corresponding excel files for the current semester here.</p>
+					<p id="internship-header">Internship Period: {internshipPeriod ? internshipPeriod : "Not set"}</p>
 				</div>
 				{/* Student's Data */}
 				<h2
