@@ -1,20 +1,35 @@
 const supertest = require('supertest');
 const app = require("../server.js");
 const request = supertest(app);
+const FormData = require('form-data');
+const fs = require('fs');
 
 describe('test companies API', () => {
+
+    beforeEach(() => {
+        // create a test file
+        fs.writeFileSync('file.xlsx', 'file content');
+    });
+
+    afterEach(() => {
+        // delete test file
+        fs.unlinkSync('file.xlsx');
+    })
+    
     it('should send an excel file in post request to /api/v1/companies/upload', async() => {
-        // create excel file
-        const file = new File(['file content'], 'file.xlsx', { type: 'application/vnd.ms-excel' });
+        // create form data object to sync to file
+        const formData = new FormData();
+
+        // read excel file
+        const file = fs.readFileSync('file.xlsx');
+        formData.append('file', file, 'file.xlsx');
         
         const res = await request
                     .post('/api/v1/companies/upload')
-                    .attach('file', file.path)
-                    .expect(200)
-                    .end((err, res) => {
-                        if (err) throw error;
-                    })
-                    expect(res.header['content-type']).toEqual('application/json; charset=utf-8');
-                    expect(res.body).toEqual({ message: 'Success uploading file'})
+                    .send(formData)
+                    .expect('Content-Type', /json/)
+        
+        expect(res.body.message).toEqual('Success uploading file');
+        expect(res.statusCode).toBe(200);
     });
 });
