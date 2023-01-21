@@ -12,7 +12,7 @@ beforeEach(()=>{
       'access-control-allow-origin': '*',
   })
   .get('/')
-  .reply(200, [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"12345"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]);
+  .reply(200, [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"01/01/2023 - 03/01/2023"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]);
 })
 
 test('Render title', async () => {
@@ -21,7 +21,7 @@ test('Render title', async () => {
 
   // ASSERT
   const title = screen.container.querySelector('#title');
-  expect(title).toHaveTextContent('Settings');
+  expect(title).toHaveTextContent('Settings - Not Saved');
   expect(title.nextElementSibling).toHaveTextContent('Make changes to file directories of emails and resumes.');
 })
 
@@ -179,7 +179,61 @@ test('Render email directory header', async () => {
     expect(saveBtn).toBeEnabled();
   })
 
-  // [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"12345"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]
+  test('Save changes post', async () => {
+    nock('http://localhost:5222')
+        .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+        })
+        .persist()
+        .post('/api/v1/settings', {
+          email_dir: 'asdasdasd',
+          resume_dir: 'asdasdasd',
+          internship_period:'01/02/2023 - 28/02/2023',
+        })
+        .reply(200, []);
+
+    // ARRANGE
+    const screen = render(<Settings />);
+
+    // ASSERT
+    const saveBtn = screen.container.querySelector('#save-btn');
+
+    const intPeriodUpdateButton = screen.getByTestId('update-period-button')
+    fireEvent.click(intPeriodUpdateButton)
+    const dateStart = screen.getAllByText('1')[1];
+    const dateEnd = screen.getAllByText('28')[1];
+    fireEvent.click(dateStart)
+    fireEvent.click(dateStart)
+    fireEvent.click(dateEnd)
+    const intConfirmButton = screen.getByTestId('confirm-internship-period')
+    fireEvent.click(intConfirmButton)
+    
+    const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
+    fireEvent.click(emailDirectoryUpdateButton)
+    const emailInput = screen.getByTestId('email-dir')
+    fireEvent.click(emailInput)
+    fireEvent.change(emailInput, {target: {value: 'asdasdasd'}})
+    const emailConfirmButton = screen.getByTestId('confirm-email-dir')
+    fireEvent.click(emailConfirmButton)
+
+    const resumeDirectoryUpdateButton = screen.getByTestId('resume-dir-button')
+    fireEvent.click(resumeDirectoryUpdateButton)
+    const resumeInput = screen.getByTestId('resume-dir')
+    fireEvent.click(resumeInput)
+    fireEvent.change(resumeInput, {target: {value: 'asdasdasd'}})
+    const resumeConfirmButton = screen.getByTestId('confirm-resume-dir')
+    fireEvent.click(resumeConfirmButton)
+    expect(saveBtn).toBeEnabled();
+    
+    fireEvent.click(saveBtn);
+
+    await waitFor(() => {
+      expect(
+          screen.getAllByText("Settings - Saved")[0]
+      ).toBeInTheDocument();
+  });
+  })
+
 
   test('Load settings', async () => {
     nock('http://localhost:5222')
@@ -199,8 +253,5 @@ test('Render email directory header', async () => {
     });
   })
 
-
-  //01/02/2023 - 28/02/2023
-  // npm install --save-dev nock
 // //TODO:: Functional tests
 
