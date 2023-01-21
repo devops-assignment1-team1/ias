@@ -20,6 +20,7 @@ import "../components/Settings/Settings.css"
 function Settings() {
     
     // States
+    const [title, setTitle] = useState("Settings - Not Saved"); //title
     const [show, setShow] = useState(false); // date picker modal show
     const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
     const [showResumeDir, setShowResumeDir] = useState(false); // input modal show
@@ -30,32 +31,38 @@ function Settings() {
     const [internshipPeriod , setInternshipPeriod] = useState("DD/MM/YYYY - DD/MM/YYYY");
     const [emailPath, setEmailPath] = useState("File Directory");
     const [resumePath, setResumePath] = useState("File Directory");
+    
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-    };
-
-    fetch(PORT + "/api/v1/settings", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            result.forEach(t => {
-                if(t.setting_type === "EMAIL_DIRECTORY"){
-                    setEmailPath(t.setting_value)
-                }
-                if(t.setting_type === "RESUME_DIRECTORY"){
-                    setResumePath(t.setting_value)
-                }
-                if(t.setting_type === "INTERNSHIP_PERIOD"){
-                    setInternshipPeriod(t.setting_value)
-                }
+    useEffect(() => {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+    
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+        fetch(PORT + "/api/v1/settings", requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                result.forEach(t => {
+                    if(t.setting_type === "EMAIL_DIRECTORY"){
+                        setEmailPath(t.setting_value)
+                        localStorage.setItem("email", t.setting_value)
+                    }
+                    if(t.setting_type === "RESUME_DIRECTORY"){
+                        setResumePath(t.setting_value)
+                        localStorage.setItem("resume", t.setting_value)
+                    }
+                    if(t.setting_type === "INTERNSHIP_PERIOD"){
+                        setInternshipPeriod(t.setting_value)
+                        localStorage.setItem("period", t.setting_value)
+                    }
+                })
             })
-        })
-        .catch(error => toast.error("Error getting data"));
+            .catch(error => toast.error("Error getting data"));
+    }, [])
+    
 
     // Internship period modal show/hide handler +
     // Internship Period text update
@@ -97,20 +104,73 @@ function Settings() {
     };
 
     // Toast, reset states, upsert data
-    function handleSave(){
-        setInternshipPeriod("DD/MM/YYYY - DD/MM/YYYY");
-        setEmailPath("File Directory");
-        setResumePath("File Directory");
-
+    function handleSave(){  
         // upsert data
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        var raw = JSON.stringify({
+          "email_dir": emailPath,
+          "resume_dir": resumePath,
+          "internship_period": internshipPeriod
+        });
+        
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+        
+        fetch(PORT + "/api/v1/settings", requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            // toast success
+            toast.success("Successfully Updated Settings");
+            setTitle("Settings - Saved");
+
+            // get default
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+        
+            var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            fetch(PORT + "/api/v1/settings", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    result.forEach(t => {
+                        if(t.setting_type === "EMAIL_DIRECTORY"){
+                            setEmailPath(t.setting_value)
+                            localStorage.setItem("email", t.setting_value)
+                        }
+                        if(t.setting_type === "RESUME_DIRECTORY"){
+                            setResumePath(t.setting_value)
+                            localStorage.setItem("resume", t.setting_value)
+                        }
+                        if(t.setting_type === "INTERNSHIP_PERIOD"){
+                            setInternshipPeriod(t.setting_value)
+                            localStorage.setItem("period", t.setting_value)
+                        }
+                    })
+                })
+                .catch(error => toast.error("Error getting data"));
+
+                // disable
+                setDisabled(true)
+            })
+          .catch(error => toast.error("Failed Updating Settings"));
     }
 
     // Disabled state 
     useEffect(() => {
+        // check if not same as old or empty, if same then still disable
         const handleDisabledSave = () => {
-            if(internshipPeriod === "DD/MM/YYYY - DD/MM/YYYY" || internshipPeriod === "" ||
-                emailPath === "File Directory" || emailPath === "" || 
-                resumePath === "File Directory" || resumePath === ""){
+            if(internshipPeriod === "DD/MM/YYYY - DD/MM/YYYY" || internshipPeriod === "" || internshipPeriod === localStorage.getItem("period") ||
+                emailPath === "File Directory" || emailPath === "" ||  emailPath === localStorage.getItem("email") ||
+                resumePath === "File Directory" || resumePath === "" || resumePath === localStorage.getItem("resume")){
                     setDisabled(true);
             }else{
                 setDisabled(false);
@@ -124,13 +184,13 @@ function Settings() {
             <div className="row">
                 {/* Title */}
                 <div className="col">
-                    <Title>Settings</Title>
+                    <Title>{title}</Title>
                     <p>Make changes to file directories of emails and resumes.</p>
                 </div>
 
                 {/* Save Changes */}
                 <div className="col justify-content-center align-self-center" style={{textAlign:"end", paddingRight:"50px" }}>
-                    <Button id="save-btn" variant="dark" style={{padding:"15px 30px"}} disabled={isDisabled} onClick={handleSave}>SAVE CHANGES</Button>
+                    <Button data-testid="save-btn" id="save-btn" variant="dark" style={{padding:"15px 30px"}} disabled={isDisabled} onClick={handleSave}>SAVE CHANGES</Button>
                 </div>
             </div>
             <hr />
