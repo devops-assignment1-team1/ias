@@ -19,4 +19,40 @@ describe('settings test suite', () => {
 
         expect(res.statusCode).toBe(200);
     });
+
+    test('tests post /settings endpoints failing no internship period', async() => {
+        const payload = {email_dir: 'qwerty', resume_dir: 'qwerty'};
+        const res = await request
+                    .post('/api/v1/settings')
+                    .send(payload)
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+
+        expect(res.statusCode).toBe(400)
+        expect(res.text).toBe('["internship_period"]')
+    });
+
+    test('tests post /settings endpoints failing no resume dir', async() => {
+        const payload = {email_dir: 'qwerty', internship_period: '12345' };
+        const res = await request
+                    .post('/api/v1/settings')
+                    .send(payload)
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+
+        expect(res.statusCode).toBe(400)
+        expect(res.text).toBe('["resume_dir"]')
+    });
+
+    test('tests post /settings endpoints failing no email dir', async() => {
+        const payload = {resume_dir: 'qwerty', internship_period: '12345' };
+        const res = await request
+                    .post('/api/v1/settings')
+                    .send(payload)
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+
+        expect(res.statusCode).toBe(400)
+        expect(res.text).toBe('["email_dir"]')
+    });
 });
