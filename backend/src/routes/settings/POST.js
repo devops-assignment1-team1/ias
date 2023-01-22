@@ -5,8 +5,8 @@ const returnError = utils.returnError;
 const express = require("express");
 const router = express.Router();
 
-const PUT = router.post('/', (req, res) => {
-    console.log("/settings (PUT)");
+const POST = router.post('/', (req, res) => {
+    console.log("/settings (POST)");
     con.connect(error => {
         if (error) throw error;
 
@@ -34,4 +34,4 @@ const PUT = router.post('/', (req, res) => {
     })
 })
 
-module.exports = PUT;
+module.exports = POST;
