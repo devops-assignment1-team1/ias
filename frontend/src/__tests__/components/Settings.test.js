@@ -7,11 +7,12 @@ import { beforeEach } from '@jest/globals';
 
 
 beforeEach(()=>{
-  nock('http://localhost:5222/api/v1/settings')
+  nock('http://localhost:5222')
   .defaultReplyHeaders({
       'access-control-allow-origin': '*',
   })
-  .get('/')
+  .persist()
+  .get('/api/v1/settings')
   .reply(200, [{"setting_type":"EMAIL_DIRECTORY","setting_value":"qwerty"},{"setting_type":"INTERNSHIP_PERIOD","setting_value":"01/01/2023 - 03/01/2023"},{"setting_type":"RESUME_DIRECTORY","setting_value":"qwerty"}]);
 })
 
