@@ -6,7 +6,7 @@ import { Title } from '../components/Title/Title'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 
-function matchStudent() {
+function MatchStudent() {
   const [studentData, setStudentData] = useState([]); // student data
   const [companiesData, setCompaniesData] = useState([]); // company data
 
@@ -174,4 +174,4 @@ function matchStudent() {
   )
 }
 
-export default matchStudent
+export default MatchStudent
