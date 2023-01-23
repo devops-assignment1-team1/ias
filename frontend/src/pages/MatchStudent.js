@@ -138,14 +138,15 @@ function MatchStudent() {
           {/* Table Body */}
           <tbody>
             {studentData.map((sdata) => {
+              console.log(sdata.company_id)
               return (<tr key={sdata.student_id}>
                 <td>{sdata.name}</td>
                 <td>{sdata.preference}</td>
                 <td>
-                  <Form.Select defaultValue={sdata.company_id !== null && sdata.company_id} data-testid="company-dropdown" aria-label="Default select example" onChange={(e)=> handleCompanyChange(sdata.student_id, e.target.value)}>
-                    <option value="" style={{color:"grey"}}>Select a company</option>
+                  <Form.Select data-testid="company-dropdown" aria-label="Default select example" onChange={(e)=> handleCompanyChange(sdata.student_id, e.target.value)}>
+                    <option key="" value="" style={{color:"grey"}}>Select a company</option>
                     {companiesData.map((data)=>{
-                      return(<option key={data.company_id} data-testid={data.company_id} value={data.company_id} >{data.company_name + " - " + data.job_role}</option>)
+                      return(<option key={data.company_id} data-testid={data.company_id} value={data.company_id} selected={sdata.company_id === data.company_id ? true : false}>{data.company_name + " - " + data.job_role}</option>)
                     })}
                   </Form.Select>
                 </td>
