@@ -23,4 +23,7 @@ app.use('/api/v1/students', getStudentRouter);
 const patchStudentRouter = require('./routes/student/PATCH');
 app.use('/api/v1/students', patchStudentRouter);
 
+const getCompanyRouter = require('./routes/company/GET');
+app.use('/api/v1/companies', getCompanyRouter);
+
 module.exports =  app
