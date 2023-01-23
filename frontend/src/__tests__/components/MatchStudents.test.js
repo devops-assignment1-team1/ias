@@ -4,6 +4,7 @@ import MatchStudent from '../../pages/MatchStudent';
 import nock from 'nock';
 import { beforeEach } from '@jest/globals';
 
+
 test('Render title', async () => { 
     // ARRANGE
     const screen = render(<MatchStudent />);
@@ -120,11 +121,11 @@ test('Update company', async() => {
     .persist()
     .intercept("/api/v1/students", "OPTIONS")
     .reply(200, [])
-    .patch('/api/v1/students', {
-        student_id: "S12345678I",
-        status: 'UNASSIGNED',
-        company_id: null,
-    })
+    .patch('/api/v1/students', {"students":[{
+        "student_id": "S12345678I",
+        "status": "UNASSIGNED",
+        "company_id": null
+      }]})
     .reply(200, []);
 
     render(<MatchStudent/>);
@@ -141,6 +142,36 @@ test('Update company', async() => {
     });
 })
 
+test('Update company - company not null', async() => { 
+    nock('http://localhost:5222')
+    .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+    })
+    .persist()
+    .intercept("/api/v1/students", "OPTIONS")
+    .reply(200, [])
+    .patch('/api/v1/students', {"students":[{
+        "student_id": "S12345670A",
+        "status": "PENDING_CONFIRMATION",
+        "company_id": 2
+      }]})
+    .reply(200, []);
+
+    render(<MatchStudent/>);
+
+    // ASSERT
+    await waitFor(() => {
+        const companyDropdown = screen.getAllByTestId('company-dropdown')[0] // third student
+        expect(companyDropdown.value).toBe("2") // default value before click
+
+        fireEvent.click(companyDropdown)
+        fireEvent.change(companyDropdown, { target: { value: '1' } });
+
+        expect(companyDropdown.value).toBe("1") // company value change to id = 1
+    });
+})
+
+
 test('Update status', async () => { 
     nock('http://localhost:5222')
     .defaultReplyHeaders({
@@ -149,11 +180,11 @@ test('Update status', async () => {
     .persist()
     .intercept("/api/v1/students", "OPTIONS")
     .reply(200, [])
-    .patch('/api/v1/students', {
-        student_id: "S12345678I",
-        status: 'UNASSIGNED',
-        company_id: 1,
-    })
+    .patch('/api/v1/students', {"students":[{
+        "student_id": "S12345678I",
+        "status": "UNASSIGNED",
+        "company_id": null
+      }]})
     .reply(200, []);
 
     render(<MatchStudent/>);
@@ -167,5 +198,34 @@ test('Update status', async () => {
         fireEvent.change(statusDropdown, { target: { value: 'PENDING_CONFIRMATION' } });
 
         expect(statusDropdown.value).toBe("PENDING_CONFIRMATION") // company value change to id = 1
+    });
+})
+
+test('Update status - company not null', async () => { 
+    nock('http://localhost:5222')
+    .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+    })
+    .persist()
+    .intercept("/api/v1/students", "OPTIONS")
+    .reply(200, [])
+    .patch('/api/v1/students', {"students":[{
+        "student_id": "S12345670A",
+        "status": "PENDING_CONFIRMATION",
+        "company_id": 2
+      }]})
+    .reply(200, []);
+
+    render(<MatchStudent/>);
+
+    // ASSERT
+    await waitFor(() => {
+        const statusDropdown = screen.getAllByTestId('status-dropdown')[0] // third student
+        expect(statusDropdown.value).toBe("PENDING_CONFIRMATION") // default value before click
+
+        fireEvent.click(statusDropdown)
+        fireEvent.change(statusDropdown, { target: { value: 'CONFIRMED' } });
+
+        expect(statusDropdown.value).toBe("CONFIRMED") // company value change to id = 1
     });
 })
