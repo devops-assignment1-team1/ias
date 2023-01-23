@@ -33,7 +33,7 @@ function Settings() {
     const [resumePath, setResumePath] = useState("File Directory");
     
 
-    useEffect(() => {
+    function initData(){
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
     
@@ -61,8 +61,11 @@ function Settings() {
                 })
             })
             .catch(error => toast.error("Error getting data"));
+    }
+
+    useEffect(() => {
+        initData()
     }, [])
-    
 
     // Internship period modal show/hide handler +
     // Internship Period text update
@@ -125,41 +128,12 @@ function Settings() {
         fetch(PORT + "/api/v1/settings", requestOptions)
           .then(response => response.text())
           .then(result => {
-            // toast success
-            toast.success("Successfully Updated Settings");
-            setTitle("Settings - Saved");
-
-            // get default
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
-        
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
-            fetch(PORT + "/api/v1/settings", requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    result.forEach(t => {
-                        if(t.setting_type === "EMAIL_DIRECTORY"){
-                            setEmailPath(t.setting_value)
-                            localStorage.setItem("email", t.setting_value)
-                        }
-                        if(t.setting_type === "RESUME_DIRECTORY"){
-                            setResumePath(t.setting_value)
-                            localStorage.setItem("resume", t.setting_value)
-                        }
-                        if(t.setting_type === "INTERNSHIP_PERIOD"){
-                            setInternshipPeriod(t.setting_value)
-                            localStorage.setItem("period", t.setting_value)
-                        }
-                    })
-                })
-                .catch(error => toast.error("Error getting data"));
-
+                // toast success
+                toast.success("Successfully Updated Settings");
+                setTitle("Settings - Saved");
+                initData();
                 // disable
-                setDisabled(true)
+                setDisabled(true);
             })
           .catch(error => toast.error("Failed Updating Settings"));
     }
