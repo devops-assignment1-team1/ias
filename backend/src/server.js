@@ -20,4 +20,7 @@ app.use('/api/v1/settings', upsertSettingsRouter);
 const getStudentRouter = require('./routes/student/GET');
 app.use('/api/v1/students', getStudentRouter);
 
+const patchStudentRouter = require('./routes/student/PATCH');
+app.use('/api/v1/students', patchStudentRouter);
+
 module.exports =  app
