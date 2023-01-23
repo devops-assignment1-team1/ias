@@ -111,3 +111,61 @@ test('Load status dropdown', async () => {
         expect(screen.getAllByTestId('status-dropdown')[0].children.length).toBe(3) // 4 + "select a company" default
     });
 })
+
+test('Update company', async() => { 
+    nock('http://localhost:5222')
+    .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+    })
+    .persist()
+    .intercept("/api/v1/students", "OPTIONS")
+    .reply(200, [])
+    .patch('/api/v1/students', {
+        student_id: "S12345678I",
+        status: 'UNASSIGNED',
+        company_id: null,
+    })
+    .reply(200, []);
+
+    render(<MatchStudent/>);
+
+    // ASSERT
+    await waitFor(() => {
+        const companyDropdown = screen.getAllByTestId('company-dropdown')[2] // third student
+        expect(companyDropdown.value).toBe("") // default value before click
+
+        fireEvent.click(companyDropdown)
+        fireEvent.change(companyDropdown, { target: { value: '1' } });
+
+        expect(companyDropdown.value).toBe("1") // company value change to id = 1
+    });
+})
+
+test('Update status', async () => { 
+    nock('http://localhost:5222')
+    .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+    })
+    .persist()
+    .intercept("/api/v1/students", "OPTIONS")
+    .reply(200, [])
+    .patch('/api/v1/students', {
+        student_id: "S12345678I",
+        status: 'UNASSIGNED',
+        company_id: 1,
+    })
+    .reply(200, []);
+
+    render(<MatchStudent/>);
+
+    // ASSERT
+    await waitFor(() => {
+        const statusDropdown = screen.getAllByTestId('status-dropdown')[2] // third student
+        expect(statusDropdown.value).toBe("UNASSIGNED") // default value before click
+
+        fireEvent.click(statusDropdown)
+        fireEvent.change(statusDropdown, { target: { value: 'PENDING_CONFIRMATION' } });
+
+        expect(statusDropdown.value).toBe("PENDING_CONFIRMATION") // company value change to id = 1
+    });
+})
