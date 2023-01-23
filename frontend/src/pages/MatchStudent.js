@@ -34,7 +34,32 @@ function MatchStudent() {
       setCompaniesData(result);
     })
     .catch(error => toast.error("Error getting data"));
-  }, [])
+  }, []);
+  
+
+  function updateData(student_id, status, company_id){
+    // update data
+    let myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    let raw = JSON.stringify({"students":[{
+      "student_id": student_id,
+      "status": status,
+      "company_id": company_id === "" ? null : company_id
+    }]});
+    let requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body:raw,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:5222/api/v1/students", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          toast.success("Successfully updated data");
+        })
+        .catch(error => toast.error("Error updating data"));
+  }
 
   function handleCompanyChange(student_id, company_id){
     var status;
@@ -54,25 +79,8 @@ function MatchStudent() {
           result.forEach(data=>{
             if(data.student_id === student_id){
               status = data.status;
-
-              // update data
-              var raw = JSON.stringify({"students":[{
-                "student_id": student_id,
-                "status": status,
-                "company_id": company_id === "" ? null : company_id
-              }]});
-              requestOptions = {
-                  method: 'PATCH',
-                  headers: myHeaders,
-                  body:raw,
-                  redirect: 'follow'
-              };
-              fetch("http://localhost:5222/api/v1/students", requestOptions)
-                  .then(response => response.json())
-                  .then(result => {
-                    toast.success("Successfully updated data");
-                  })
-                  .catch(error => toast.error("Error updating data"));
+              
+              updateData(student_id, status, company_id);
             }
           })
         })
@@ -98,31 +106,14 @@ function MatchStudent() {
             if(data.student_id === student_id){
               company_id = data.company_id;
 
-              // updata data
-              var raw = JSON.stringify({"students":[{
-                "student_id": student_id,
-                "status": status,
-                "company_id": company_id === "" ? null : company_id
-              }]});
-              requestOptions = {
-                  method: 'PATCH',
-                  headers: myHeaders,
-                  body:raw,
-                  redirect: 'follow'
-              };
-              fetch("http://localhost:5222/api/v1/students", requestOptions)
-                  .then(response => response.json())
-                  .then(result => {
-                    toast.success("Successfully updated data");
-                  })
-                  .catch(error => toast.error("Error updating data"));
+              updateData(student_id, status, company_id);
             }
           })
         })
         .catch(error => toast.error("Error getting data"));
   }
 
-  return (
+  return(
     <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial"}} className="container-fluid m-0">
         <div className="row">
             {/* Title */}
@@ -154,7 +145,7 @@ function MatchStudent() {
                   <Form.Select defaultValue={sdata.company_id !== null && sdata.company_id} data-testid="company-dropdown" aria-label="Default select example" onChange={(e)=> handleCompanyChange(sdata.student_id, e.target.value)}>
                     <option value="" style={{color:"grey"}}>Select a company</option>
                     {companiesData.map((data)=>{
-                      return(<option key={data.company_id} data-testid={data.company_id} value={data.company_id} >{data.company_name}</option>)
+                      return(<option key={data.company_id} data-testid={data.company_id} value={data.company_id} >{data.company_name + " - " + data.job_role}</option>)
                     })}
                   </Form.Select>
                 </td>
@@ -169,7 +160,6 @@ function MatchStudent() {
             })}
           </tbody>
         </Table>
-        
     </div>
   )
 }
