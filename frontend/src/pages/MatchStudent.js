@@ -36,6 +36,92 @@ function matchStudent() {
     .catch(error => toast.error("Error getting data"));
   }, [])
 
+  function handleCompanyChange(student_id, company_id){
+    var status;
+
+    // get students status
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:5222/api/v1/students", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          result.forEach(data=>{
+            if(data.student_id === student_id){
+              status = data.status;
+
+              // update data
+              var raw = JSON.stringify({"students":[{
+                "student_id": student_id,
+                "status": status,
+                "company_id": company_id === "" ? null : company_id
+              }]});
+              requestOptions = {
+                  method: 'PATCH',
+                  headers: myHeaders,
+                  body:raw,
+                  redirect: 'follow'
+              };
+              fetch("http://localhost:5222/api/v1/students", requestOptions)
+                  .then(response => response.json())
+                  .then(result => {
+                    toast.success("Successfully updated data");
+                  })
+                  .catch(error => toast.error("Error updating data"));
+            }
+          })
+        })
+        .catch(error => toast.error("Error getting data"));
+  }
+
+  function handleStatusChange(student_id, status){
+    var company_id;
+
+    // get students company
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+    };
+    fetch("http://localhost:5222/api/v1/students", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          result.forEach(data=>{
+            if(data.student_id === student_id){
+              company_id = data.company_id;
+
+              // updata data
+              var raw = JSON.stringify({"students":[{
+                "student_id": student_id,
+                "status": status,
+                "company_id": company_id === "" ? null : company_id
+              }]});
+              requestOptions = {
+                  method: 'PATCH',
+                  headers: myHeaders,
+                  body:raw,
+                  redirect: 'follow'
+              };
+              fetch("http://localhost:5222/api/v1/students", requestOptions)
+                  .then(response => response.json())
+                  .then(result => {
+                    toast.success("Successfully updated data");
+                  })
+                  .catch(error => toast.error("Error updating data"));
+            }
+          })
+        })
+        .catch(error => toast.error("Error getting data"));
+  }
+
   return (
     <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial"}} className="container-fluid m-0">
         <div className="row">
@@ -65,7 +151,7 @@ function matchStudent() {
                 <td>{sdata.name}</td>
                 <td>{sdata.preference}</td>
                 <td>
-                  <Form.Select defaultValue={sdata.company_id !== null && sdata.company_id} data-testid="company-dropdown" aria-label="Default select example">
+                  <Form.Select defaultValue={sdata.company_id !== null && sdata.company_id} data-testid="company-dropdown" aria-label="Default select example" onChange={(e)=> handleCompanyChange(sdata.student_id, e.target.value)}>
                     <option value="" style={{color:"grey"}}>Select a company</option>
                     {companiesData.map((data)=>{
                       return(<option key={data.company_id} data-testid={data.company_id} value={data.company_id} >{data.company_name}</option>)
@@ -73,7 +159,7 @@ function matchStudent() {
                   </Form.Select>
                 </td>
                 <td>
-                  <Form.Select defaultValue={sdata.status} aria-label="Default select example" data-testid="status-dropdown">
+                  <Form.Select defaultValue={sdata.status} aria-label="Default select example" data-testid="status-dropdown" onChange={(e)=> handleStatusChange(sdata.student_id, e.target.value)}>
                     <option value="UNASSIGNED">Unassigned</option>
                     <option value="PENDING_CONFIRMATION">Pending Confirmation</option>
                     <option value="CONFIRMED">Confirmed</option>
