@@ -20,7 +20,7 @@ import "../components/Settings/Settings.css"
 function Settings() {
     
     // States
-    const [title, setTitle] = useState("Settings - Not Saved"); //title
+    const [title, setTitle] = useState("Settings - Saved"); //title
     const [show, setShow] = useState(false); // date picker modal show
     const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
     const [showResumeDir, setShowResumeDir] = useState(false); // input modal show
@@ -87,6 +87,7 @@ function Settings() {
             const monthEnd = String(end.month.index + 1).length === 1 ? "0" + String(end.month.index + 1) : String(end.month.index + 1);
             const endStr = dayEnd + "/" + monthEnd + "/" + String(end.year);
             setInternshipPeriod(startStr + " - " + endStr);
+            setTitle("Settings - Not Saved");
         };
     };
 
@@ -96,6 +97,7 @@ function Settings() {
     const handleCloseEmailDir = () => {
         setShowEmailDir(false);
         setEmailPath(document.getElementById("email-dir").value);
+        setTitle("Settings - Not Saved");
     };
 
     // Resume directory show/hide handler +
@@ -104,6 +106,7 @@ function Settings() {
     const handleCloseResumeDir = () => {
         setShowResumeDir(false);
         setResumePath(document.getElementById("resume-dir").value);
+        setTitle("Settings - Not Saved");
     };
 
     // Toast, reset states, upsert data
