@@ -22,7 +22,7 @@ test('Render title', async () => {
 
   // ASSERT
   const title = screen.container.querySelector('#title');
-  expect(title).toHaveTextContent('Settings - Not Saved');
+  expect(title).toHaveTextContent('Settings - Saved');
   expect(title.nextElementSibling).toHaveTextContent('Make changes to file directories of emails and resumes.');
 })
 
@@ -197,6 +197,8 @@ test('Render email directory header', async () => {
     const screen = render(<Settings />);
 
     // ASSERT
+    expect(screen.getAllByText("Settings - Saved")[0]).toBeInTheDocument();
+
     const saveBtn = screen.container.querySelector('#save-btn');
 
     const intPeriodUpdateButton = screen.getByTestId('update-period-button')
@@ -208,6 +210,7 @@ test('Render email directory header', async () => {
     fireEvent.click(dateEnd)
     const intConfirmButton = screen.getByTestId('confirm-internship-period')
     fireEvent.click(intConfirmButton)
+    expect(screen.getAllByText("Settings - Not Saved")[0]).toBeInTheDocument();
     
     const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
     fireEvent.click(emailDirectoryUpdateButton)
