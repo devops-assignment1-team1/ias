@@ -107,3 +107,26 @@ test('Render table rows', async() => {
         ).toBe(3); // 2 + 1 header
     });
 })
+
+test('Prepare email post', async () => { 
+    nock('http://localhost:5222')
+        .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+        })
+        .persist()
+        .post('/api/v1/students/generateEmail')
+        .reply(200,[]);
+
+    // ARRANGE
+    const screen = render(<PrepareEmail />);
+
+    // ASSERT
+    const generateEmailBtn = screen.container.querySelector('#email-btn');
+    fireEvent.click(generateEmailBtn);
+
+    await waitFor(() => {
+        expect(
+            screen.getByText("Prepare Emails - Email Prepared")
+        ).toBeInTheDocument();
+    });
+})
