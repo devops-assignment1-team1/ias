@@ -90,11 +90,7 @@ const POST = router.post('/generateEmail', async (req, res) => {
                 ), message.toBytes());
     }
 
-    if (success) {
-        returnSuccess(res);
-    } else {
-        returnSuccess(res, {missingResume: missingResume});
-    }
+    returnSuccess(res, {missingResume: missingResume});
 });
 
 module.exports = POST;
