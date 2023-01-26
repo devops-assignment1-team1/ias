@@ -10,6 +10,19 @@ describe('student test suite', () => {
         expect(response.body.length >= 0).toBeTruthy();
     });
 
+    test('test post /students', async() => {
+        const file = fs.createReadStream(path.join(__dirname ,'..', "/routes/student/internshipData/12/12/2022-12/1/2023/gaf.csv"));
+        request
+          .post("http://localhost:5222/api/v1/students/upload")
+          .attach("student", file)
+          .expect(200)
+          .end((err, res) => {
+            if (err) throw err;
+            expect(res.body.message).toBe("File uploaded successfully");
+            done();
+          });
+    })
+    
     test('tests get /students filter status (UNASSIGNED) endpoint', async () => {
         const response = await request.get("/api/v1/students?status=UNASSIGNED");
         expect(response.statusCode).toBe(200);
