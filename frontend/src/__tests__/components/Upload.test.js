@@ -12,15 +12,6 @@ test('Render title', async () => {
   expect(title.nextElementSibling).toHaveTextContent('Upload the corresponding excel files for the current semester here.');
 })
 
-test('Render internship period header', async () => {
-    // ARRANGE
-    const screen = render(<UploadData />);
-
-    // ASSERT
-    const internshipHeader = screen.container.querySelector('#internship-header');
-    expect(internshipHeader).toBeInTheDocument();
-})
-
 test('Render student data header', async () => {
     // ARRANGE
     const screen = render(<UploadData />);
@@ -44,7 +35,7 @@ test('Render file directory fields', async () => {
     const screen = render(<UploadData />);
 
     // ASSERT
-    const fileDirectoryFields = screen.getAllByText('File Directory')
+    const fileDirectoryFields = screen.container.querySelectorAll('.card-body');
     expect(fileDirectoryFields.length).toBe(2)
 })
 
