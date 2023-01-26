@@ -1,7 +1,9 @@
 // Import components
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min.js'
-import Footer from './components/Footer/Footer'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min.js";
+
+import { Toaster } from 'react-hot-toast';
+import Footer from "./components/Footer/Footer";
 import Main from './pages/Main'
 import UploadData from './pages/UploadData'
 import MatchStudent from './pages/MatchStudent'
@@ -15,15 +17,12 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 function App() {
   return (
     <div className="App">
-      <div
-        style={{
-          flex: '1 1 auto',
-          display: 'flex',
-          flexFlow: 'column',
-          overflowY: 'hidden'
-        }}>
-        {/* NavBar */}
-        <NavBar />
+          <div style={{ flex: "1 1 auto", display: "flex", flexFlow: "column", overflowY: "hidden" }}>
+            {/* Toaster */}
+            <Toaster/>
+
+            {/* NavBar */}
+            <NavBar />
 
         {/* Route the different pages */}
         <Routes>
