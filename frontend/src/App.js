@@ -9,10 +9,10 @@ import UploadData from './pages/UploadData'
 import MatchStudent from './pages/MatchStudent'
 import PrepareEmail from './pages/PrepareEmail'
 import Settings from './pages/Settings'
-import NavBar from './components/NavBar/NavBar';
+import NavBar from './components/NavBar/NavBar'
 
-// Import React Router 
-import { Routes, Route, Navigate } from 'react-router-dom';
+// Import React Router
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
   return (
@@ -24,22 +24,22 @@ function App() {
             {/* NavBar */}
             <NavBar />
 
-            {/* Route the different pages */}
-            <Routes>
-              <Route path='/' element={<Navigate to={"/Main"} />} />
-              <Route path='*' element={<Navigate to={"/Main"} />} />
-              <Route path='/Main' element={<Main />} />
-              <Route path='/Upload_Data' element={<UploadData />} />
-              <Route path='/Match_Student' element={<MatchStudent />} />
-              <Route path='/Prepare_Email' element={<PrepareEmail />} />
-              <Route path='/Settings' element={<Settings />} />
-            </Routes>
-          </div>
+        {/* Route the different pages */}
+        <Routes>
+          <Route path="/" element={<Navigate to={'/Main'} />} />
+          <Route path="*" element={<Navigate to={'/Main'} />} />
+          <Route path="/Main" element={<Main />} />
+          <Route path="/Upload_Data" element={<UploadData />} />
+          <Route path="/Match_Student" element={<MatchStudent />} />
+          <Route path="/Prepare_Email" element={<PrepareEmail />} />
+          <Route path="/Settings" element={<Settings />} />
+        </Routes>
+      </div>
 
-       {/* Footer */}
-       <Footer />
+      {/* Footer */}
+      <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
