@@ -1,35 +1,20 @@
 const supertest = require('supertest');
 const app = require("../server.js");
 const request = supertest(app);
-const FormData = require('form-data');
 const fs = require('fs');
+const path = require('path');
 
 describe('test companies API', () => {
-
-    beforeEach(() => {
-        // create a test file
-        fs.writeFileSync('file.xlsx', 'file content');
-    });
-
-    afterEach(() => {
-        // delete test file
-        fs.unlinkSync('file.xlsx');
+    test('Post /compaines', async() => {
+        const file = fs.createReadStream(path.join(__dirname ,'../../..', "TestData/gaf.csv"));
+        request
+          .post("http://localhost:5222/api/v1/companies/upload")
+          .attach("company", file)
+          .expect(200)
+          .end((err, res) => {
+            if (err) throw err;
+            expect(res.body.message).toBe("File uploaded successfully");
+            done();
+          });
     })
-    
-    it('should send an excel file in post request to /api/v1/companies/upload', async() => {
-        // create form data object to sync to file
-        const formData = new FormData();
-
-        // read excel file
-        const file = fs.readFileSync('file.xlsx');
-        formData.append('file', file, 'file.xlsx');
-        
-        const res = await request
-                    .post('/api/v1/companies/upload')
-                    .send(formData)
-                    .expect('Content-Type', /json/)
-        
-        expect(res.body.message).toEqual('Success uploading file');
-        expect(res.statusCode).toBe(200);
-    });
 });
