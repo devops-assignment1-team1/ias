@@ -19,7 +19,7 @@ describe('student test suite', () => {
           .expect(200)
           .end((err, res) => {
             if (err) throw err;
-            expect(res.body.message).toBe("File uploaded successfully");
+            expect(res.body.message).toBe("Successfully uploaded files");
             done();
           });
     })
