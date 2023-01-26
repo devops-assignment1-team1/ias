@@ -1,9 +1,10 @@
 const supertest = require('supertest');
 const app = require("../server.js");
 const request = supertest(app);
+const fs = require('fs');
+const path = require('path');
 
 describe('student test suite', () => {
-
     test('tests get /students endpoint', async () => {
         const response = await request.get("/api/v1/students");
         expect(response.statusCode).toBe(200);
@@ -22,7 +23,7 @@ describe('student test suite', () => {
             done();
           });
     })
-    
+
     test('tests get /students filter status (UNASSIGNED) endpoint', async () => {
         const response = await request.get("/api/v1/students?status=UNASSIGNED");
         expect(response.statusCode).toBe(200);

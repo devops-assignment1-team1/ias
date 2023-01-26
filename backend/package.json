@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "devStart": "nodemon src/index.js",
-    "test": "jest --coverage --coverage --reporters=default --reporters=jest-junit --forceExit"
+    "test": "jest --coverage --coverage --reporters=default --reporters=jest-junit --forceExit --maxWorkers 2"
   },
   "author": "",
   "license": "ISC",
