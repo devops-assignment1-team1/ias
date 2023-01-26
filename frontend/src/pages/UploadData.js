@@ -11,7 +11,7 @@ import { BiFolderOpen } from "react-icons/bi";
 import axios, { Axios } from 'axios';
 
 // Import style
-import "../components/Settings/Settings.css"
+// import "../components/Settings/Settings.css"
 
 function UploadData() {
   // States
@@ -66,7 +66,8 @@ function UploadData() {
           setInternshipPeriod(internshipPeriod);
         }
       })
-      .catch((error) => console.log(error));
+      .then((result) => toast.success("Success updating company data"))
+      .catch((error) => toast.error("Failed updating company data"));
   }, []);
 
   // Student file show/hide handler +
