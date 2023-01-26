@@ -188,4 +188,4 @@ jobs:
             Release ${{ github.ref_name }} made.
 
             Repository: ${{ github.repository }}
-            See changes: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+            Download Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
