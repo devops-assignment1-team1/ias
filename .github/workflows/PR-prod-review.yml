@@ -1,4 +1,4 @@
-name: Pull Request Review
+name: Pull Request Prod Review
 
 on:
   pull_request:
