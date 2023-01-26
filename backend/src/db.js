@@ -3,7 +3,8 @@ const con = mysql.createConnection({
     host: 'localhost',
     user: 'user',
     password: 'password',
-    database: 'db'
+    database: 'db',
+    multipleStatements: true,
 });
 
 module.exports = con;
