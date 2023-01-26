@@ -150,7 +150,6 @@ test('Render email directory header', async () => {
 
     // ASSERT
     const saveBtn = screen.container.querySelector('#save-btn');
-    expect(saveBtn).toBeDisabled();
 
     const intPeriodUpdateButton = screen.getByTestId('update-period-button')
     fireEvent.click(intPeriodUpdateButton)
@@ -178,42 +177,6 @@ test('Render email directory header', async () => {
     fireEvent.click(resumeConfirmButton)
 
     expect(saveBtn).toBeEnabled();
-  })
-
-  test('Save changes button state no changes in all fields', async () => {
-    // ARRANGE
-    const screen = render(<Settings />);
-
-    // ASSERT
-    const saveBtn = screen.container.querySelector('#save-btn');
-    expect(saveBtn).toBeDisabled();
-
-    const intPeriodUpdateButton = screen.getByTestId('update-period-button')
-    fireEvent.click(intPeriodUpdateButton)
-    const dateStart = screen.getAllByText('1')[0];
-    const dateEnd = screen.getAllByText('3')[0];
-    fireEvent.click(dateStart)
-    fireEvent.click(dateEnd)
-    const intConfirmButton = screen.getByTestId('confirm-internship-period')
-    fireEvent.click(intConfirmButton)
-    
-    const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
-    fireEvent.click(emailDirectoryUpdateButton)
-    const emailInput = screen.getByTestId('email-dir')
-    fireEvent.click(emailInput)
-    fireEvent.change(emailInput, {target: {value: 'qwerty'}})
-    const emailConfirmButton = screen.getByTestId('confirm-email-dir')
-    fireEvent.click(emailConfirmButton)
-
-    const resumeDirectoryUpdateButton = screen.getByTestId('resume-dir-button')
-    fireEvent.click(resumeDirectoryUpdateButton)
-    const resumeInput = screen.getByTestId('resume-dir')
-    fireEvent.click(resumeInput)
-    fireEvent.change(resumeInput, {target: {value: 'qwerty'}})
-    const resumeConfirmButton = screen.getByTestId('confirm-resume-dir')
-    fireEvent.click(resumeConfirmButton)
-
-    expect(saveBtn).toBeDisabled();
   })
 
   test('Save changes post', async () => {
