@@ -14,7 +14,7 @@ describe('student test suite', () => {
     test('test post /students', async() => {
         const file = fs.createReadStream(path.join(__dirname ,'..', "/routes/student/internshipData/12/12/2022-12/1/2023/gaf.csv"));
         request
-          .post("http://localhost:5222/api/v1/students/upload")
+          .post("/api/v1/students/upload")
           .attach("student", file)
           .expect(200)
           .end((err, res) => {
