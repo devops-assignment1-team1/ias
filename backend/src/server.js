@@ -23,6 +23,9 @@ app.use('/api/v1/students', getStudentRouter);
 const patchStudentRouter = require('./routes/student/PATCH');
 app.use('/api/v1/students', patchStudentRouter);
 
+const postStudentRouter = require('./routes/student/POST');
+app.use('/api/v1/students', postStudentRouter);
+
 const getCompanyRouter = require('./routes/company/GET');
 app.use('/api/v1/companies', getCompanyRouter);
 

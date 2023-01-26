@@ -1,6 +1,9 @@
 const supertest = require('supertest');
 const app = require("../server.js");
 const request = supertest(app);
+const path = require('path');
+const fs = require('fs');
+const os = require("os");
 
 describe('student test suite', () => {
 
@@ -134,5 +137,30 @@ describe('student test suite', () => {
                     .set('Accept', 'application/json')
         expect(response.statusCode).toBe(400);
         expect(response.text).toBe('Database Error');
+    });
+
+    test('tests patch /students/generateEmail', async () => {
+        const payload = { email_dir: 'eexports/email', resume_dir: 'eexports/resume', internship_period: '02/12/2023 - 10/12/2024' };
+        response = await request
+            .post('/api/v1/settings')
+            .send(payload)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+
+        expect(response.statusCode).toBe(200);
+
+        const userHomeDir = os.homedir();
+        expect(fs.existsSync(path.join(userHomeDir, 'eexports/email', '02-12-2023 to 10-12-2024'))).toBe(true);
+        expect(fs.existsSync(path.join(userHomeDir, 'eexports/resume', '02-12-2023 to 10-12-2024'))).toBe(true);
+
+        var response = await request
+            .post('/api/v1/students/generateEmail')
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+        expect(response.statusCode).toBe(200);
+        console.log(response.text);
+        expect(JSON.parse(response.text).missingResume.length > 0).toBeTruthy();
+
+        expect(fs.existsSync(path.join(userHomeDir, 'eexports/email', '02-12-2023 to 10-12-2024', `${JSON.parse(response.text).missingResume[0]}.msg`))).toBe(true);
     });
 });

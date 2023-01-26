@@ -8,6 +8,12 @@
     "devStart": "nodemon src/index.js",
     "test": "jest --coverage --coverage --reporters=default --reporters=jest-junit --forceExit"
   },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/routes/student/msg.js",
+      "<rootDir>/src/utils.js"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -15,6 +21,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "fetch-mock": "^9.11.0",
+    "fs-extra": "^11.1.0",
     "jest-junit": "^15.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
