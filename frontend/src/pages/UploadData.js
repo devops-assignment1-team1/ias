@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import { BiFolderOpen } from "react-icons/bi";
-import axios, { Axios } from 'axios';
+const axios = require('axios');
 
 // Import style
 // import "../components/Settings/Settings.css"
