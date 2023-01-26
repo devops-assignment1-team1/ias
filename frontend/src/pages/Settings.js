@@ -145,9 +145,9 @@ function Settings() {
     useEffect(() => {
         // check if not same as old or empty, if same then still disable
         const handleDisabledSave = () => {
-            if(internshipPeriod === "DD/MM/YYYY - DD/MM/YYYY" || internshipPeriod === "" || internshipPeriod === localStorage.getItem("period") ||
-                emailPath === "File Directory" || emailPath === "" ||  emailPath === localStorage.getItem("email") ||
-                resumePath === "File Directory" || resumePath === "" || resumePath === localStorage.getItem("resume")){
+            if( internshipPeriod === localStorage.getItem("period") &&
+                emailPath === localStorage.getItem("email") &&
+                resumePath === localStorage.getItem("resume")){
                     setDisabled(true);
             }else{
                 setDisabled(false);
