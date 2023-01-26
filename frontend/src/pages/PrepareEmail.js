@@ -66,7 +66,7 @@ function PrepareEmail() {
 
 
   return (
-    <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial"}} className="container-fluid m-0">
+    <div style={{paddingTop:"80px",paddingLeft:"50px",textAlign:"initial", minHeight:"95vh"}} className="container-fluid m-0">
         <div className="row">
             {/* Title */}
             <div className="col-9">
