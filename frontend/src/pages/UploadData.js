@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PORT from '../conn'
 
 // Import components
-import toast from 'react-hot-toast'
 import { Title } from '../components/Title/Title'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Modal from 'react-bootstrap/Modal'
 import { BiFolderOpen } from 'react-icons/bi'
-import axios, { Axios } from 'axios'
+import axios from 'axios'
 
 // Import style
 // import "../components/Settings/Settings.css"
@@ -17,7 +16,6 @@ function UploadData() {
   // States
   const [showStudentFile, setShowStudentFile] = useState(false) // input modal show
   const [showCompanyFile, setShowCompanyFile] = useState(false) // input modal show
-  const [isDisabled, setDisabled] = useState(true) // save changes
 
   // Lincoln file file
   const [studentFile, setStudentFile] = useState(null)
