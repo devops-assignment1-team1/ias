@@ -44,8 +44,6 @@ function UploadData() {
 
   const [studentFileName, setStudentFileName] = useState('')
   const [companyFileName, setCompanyFileName] = useState('')
-
-  const [data, setData] = useState(null)
   const [internshipPeriod, setInternshipPeriod] = useState(null)
 
   // get internship period to display
@@ -59,15 +57,12 @@ function UploadData() {
       })
       .then((data) => {
         if (data && data.length > 0) {
-          setData(data)
           const internshipPeriod = data.filter(
             (setting) => setting.setting_type === 'INTERNSHIP_PERIOD'
           )[0].setting_value
           setInternshipPeriod(internshipPeriod)
         }
       })
-      .then((result) => toast.success('Success updating company data'))
-      .catch((error) => toast.error('Failed updating company data'))
   }, [])
 
   // Student file show/hide handler +
@@ -105,7 +100,11 @@ function UploadData() {
           </p>
           <div className="row">
             <p>Internship Period: </p>
-            <b>{internshipPeriod}</b>
+            {internshipPeriod ? (
+              <b>{internshipPeriod}</b>
+            ) : (
+              <b>Not specified</b>
+            )}
           </div>
         </div>
       </div>

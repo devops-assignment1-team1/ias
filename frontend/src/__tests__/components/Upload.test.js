@@ -106,7 +106,7 @@ describe('Render components', () => {
   })
 
   test('Load internship period', async () => {
-    render(<UploadData />)
+    const screen = render(<UploadData />)
 
     await waitFor(() => {
       expect(
