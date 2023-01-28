@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, getAllByTestId } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import UploadData from '../../pages/UploadData'
 import nock from 'nock'
@@ -19,6 +19,16 @@ describe('Render components', () => {
         },
         { setting_type: 'RESUME_DIRECTORY', setting_value: 'qwerty' }
       ])
+  })
+
+  test('Load internship period', async () => {
+    const screen = render(<UploadData />)
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByText('01/01/2023 - 03/01/2023')[0]
+      ).toBeInTheDocument()
+    })
   })
 
   test('Render title', async () => {
@@ -105,13 +115,69 @@ describe('Render components', () => {
     expect(input).toBeVisible()
   })
 
-  test('Load internship period', async () => {
-    const screen = render(<UploadData />)
+  test('Upload student', async () => {
+    // ARRANGE
+    nock('http://localhost:5222')
+        .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+        })
+        .persist()
+        .post('/api/v1/students/upload')
+        .reply(200);
 
-    await waitFor(() => {
-      expect(
-        screen.getAllByText('01/01/2023 - 03/01/2023')[0]
-      ).toBeInTheDocument()
-    })
+    const upload = render(<UploadData />)
+
+    // ASSERT
+    const studentFileUpdateButton = upload.container.querySelector('#student-upload')
+      fireEvent.click(studentFileUpdateButton)
+      const studentFileModal = upload.getByText('Choose file to upload')
+      expect(studentFileModal).toBeVisible()
+     
+  
+      const { getByTestId, getAllByTestId } = render(<UploadData />);
+  
+      const fileInput = getByTestId('student-input');
+      const file = new File(['test file content'], 'test-student.xlsx', {
+          type: 'text/plain',
+      });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      const confirmButton = screen.getByRole('button', { name: 'CONFIRM' })
+      fireEvent.click(confirmButton)
+      await waitFor(()=>{
+        expect(getAllByTestId("value-student")[0].firstChild.textContent).toBe(" test-student.xlsx")
+      })
+  })
+
+  test('Upload company', async () => {
+    // ARRANGE
+    nock('http://localhost:5222')
+        .defaultReplyHeaders({
+            'access-control-allow-origin': '*',
+        })
+        .persist()
+        .post('/api/v1/companies/upload')
+        .reply(200);
+
+    const upload = render(<UploadData />)
+
+    // ASSERT
+    const studentFileUpdateButton = upload.container.querySelector('#company-upload')
+      fireEvent.click(studentFileUpdateButton)
+      const companyFileModal = upload.getByText('Choose file to upload')
+      expect(companyFileModal).toBeVisible()
+     
+  
+      const { getByTestId, getAllByTestId } = render(<UploadData />);
+  
+      const fileInput = getByTestId('company-input');
+      const file = new File(['test file content'], 'test-company.xlsx', {
+          type: 'text/plain',
+      });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+      const confirmButton = screen.getByRole('button', { name: 'CONFIRM' })
+      fireEvent.click(confirmButton)
+      await waitFor(()=>{
+        expect(getAllByTestId("value-company")[0].firstChild.textContent).toBe(" test-company.xlsx")
+      })
   })
 })
