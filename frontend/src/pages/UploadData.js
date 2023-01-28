@@ -48,9 +48,6 @@ function UploadData() {
   React.useEffect(() => {
     fetch(PORT + '/api/v1/settings')
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText)
-        }
         return response.json()
       })
       .then((data) => {
@@ -122,8 +119,8 @@ function UploadData() {
       <div className="container-fluid m-0">
         <div className="row">
           {/* Text */}
-          <Card body className="col-9" style={{ fontSize: '20px' }}>
-            <BiFolderOpen /> {studentFileName}
+          <Card body className="col-9" style={{ fontSize: '20px' }} data-testid="value-student">
+          <BiFolderOpen /> {studentFileName}
           </Card>
 
           {/* Button to Upload */}
@@ -153,7 +150,7 @@ function UploadData() {
       <div className="container-fluid m-0" style={{ paddingBottom: '100px' }}>
         <div className="row">
           {/* Text */}
-          <Card body className="col-9" style={{ fontSize: '20px' }}>
+          <Card body className="col-9" style={{ fontSize: '20px' }} data-testid="value-company">
             <BiFolderOpen /> {companyFileName}
           </Card>
 
