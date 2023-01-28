@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-const con = require("../../db");
-const utils = require("../../utils");
-const returnSuccess = utils.returnSuccess;
-const returnError = utils.returnError;
-const express = require("express");
-const router = express.Router();
-
-const PUT = router.post('/', (req, res) => {
-    console.log("/settings (PUT)");
-    con.connect(error => {
-        if (error) throw error;
-
-        const body = req.body;
-        if (body.email_dir === undefined) return returnError(res, ["email_dir"]);
-        if (body.resume_dir === undefined) return returnError(res, ["resume_dir"]);
-        if (body.internship_period === undefined) return returnError(res, ["internship_period"]);
-=======
 const con = require('../../db')
 const utils = require('../../utils')
 const returnSuccess = utils.returnSuccess
@@ -42,7 +24,6 @@ const POST = router.post('/', (req, res) => {
       return returnError(res, ['missing /'])
     if (!body.internship_period.includes('-'))
       return returnError(res, ['missing -'])
->>>>>>> main
 
     con.query(
       ` 
@@ -54,18 +35,6 @@ const POST = router.post('/', (req, res) => {
                                 END
             WHERE setting_type IN("RESUME_DIRECTORY", "EMAIL_DIRECTORY", "INTERNSHIP_PERIOD");
             `,
-<<<<<<< HEAD
-            [body.resume_dir, body.email_dir, body.internship_period],
-            function(error, results, fields){
-                if (error) throw error;
-                returnSuccess(res, { "result": "success" });
-            }
-        );
-    })
-})
-
-module.exports = PUT;
-=======
       [body.resume_dir, body.email_dir, body.internship_period],
       function (error, results, fields) {
         /* istanbul ignore next */
@@ -93,4 +62,3 @@ module.exports = PUT;
 })
 
 module.exports = POST
->>>>>>> main
