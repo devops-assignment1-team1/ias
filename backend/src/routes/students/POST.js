@@ -1,11 +1,15 @@
 const con = require("../../db");
-const returnSuccess = require("../../utils");
-const returnError = require("../../utils");
+const utils = require("../../utils");
+const returnSuccess = utils.returnSuccess;
+const returnError = utils.returnError;
 const express = require("express");
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const os = require("os");
+const userHomeDir = os.homedir();
 const axios = require('axios');
+const Excel = require('exceljs');
 
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
@@ -29,20 +33,52 @@ getInternshipPeriod().then(period => {
 
 // upload student file to directory
 const POST = router.post("/upload", (req, res)=>{
-    console.log(internshipPeriod)
-    console.log(req.files.student);
     const filename = req.files.student.name;
     const file = req.files.student
-    const uploadPath = path.join(__dirname, 'internshipData', internshipPeriod)
+    const uploadPath = path.join(userHomeDir, 'backup/internshipData/students', internshipPeriod.replace("-","to").split("/").join("-"))
+    
+    /* istanbul ignore next */
     if (!fs.existsSync(uploadPath)) {
         fs.mkdirSync(uploadPath, { recursive: true });
     }
     file.mv(path.join(uploadPath, filename),(err)=>{
         if(err){
+             /* istanbul ignore next */
             return res.send(err);
         }
         else {
-            res.json({ message: "Successfully uploaded files" });
+            const workbook = new Excel.Workbook();
+            workbook.xlsx.readFile(path.join(uploadPath, filename)).then(()=>{
+                let theData = [];
+                let headers = {};
+                workbook.eachSheet((ws,sheetId)=>{
+                    
+                    /* istanbul ignore next */for(let i=1;i<=ws.actualColumnCount; i++){
+                        headers[i]=ws.getRow(1).getCell(i).value;
+                    }
+
+
+                    /* istanbul ignore next */for(let x=2;x<=ws.actualRowCount;x++){
+                        let theRow = {};
+
+                        for(let y=1;y<=ws.actualColumnCount;y++){
+                            theRow[headers[y]] = ws.getRow(x).getCell(y).value
+                        }
+                        theData.push(theRow)
+                    }
+                })
+                if (headers[1] || headers[2] || headers[3] || headers[4]  === undefined) return returnError(res, "Missing Headers");
+
+                con.query(` DELETE FROM student `)
+
+                theData.forEach(row => {
+                    con.query(
+                        `     
+                        INSERT INTO student(student_id, name, preference, status, company_id) VALUES (?, ? , ? , ? , null);`,
+                        [row["Student ID"], row["Name"] , row["Preference"] , row["Status"].toUpperCase()])
+                });
+                return res.json({ message: "Successfully updated & uploaded files" });
+            })
         }
     })
 })
