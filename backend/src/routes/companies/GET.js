@@ -1,11 +1,13 @@
 const con = require("../../db");
-const returnSuccess = require("../../utils");
-const returnError = require("../../utils");
+const utils = require("../../utils");
+const returnSuccess = utils.returnSuccess;
+const returnError = utils.returnError;
 const express = require("express");
 const router = express.Router();
 
 const GET = router.get('/', (req, res) => {
     con.connect(error => {
+        /* istanbul ignore next */
         if (error) throw error;
 
         con.query('SELECT * FROM company', (error, results) => {
