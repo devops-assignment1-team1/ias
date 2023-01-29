@@ -8,6 +8,7 @@ import Card from 'react-bootstrap/Card'
 import Modal from 'react-bootstrap/Modal'
 import { BiFolderOpen } from 'react-icons/bi'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 // Import style
 // import "../components/Settings/Settings.css"
@@ -27,7 +28,14 @@ function UploadData() {
     let studentformData = new FormData()
     studentformData.append('student', studentFile)
     setStudentFileName(studentFile.name)
-    axios.post(PORT + '/api/v1/students/upload', studentformData)
+    axios
+      .post(PORT + '/api/v1/students/upload', studentformData)
+      .then(() => {
+        toast.success('Upload successful')
+      })
+      .catch(() => {
+        toast.error('Database error, please check correct file format.')
+      })
     handleCloseStudentFile()
   }
 
@@ -36,7 +44,14 @@ function UploadData() {
     let companyformData = new FormData()
     companyformData.append('company', companyFile)
     setCompanyFileName(companyFile.name)
-    axios.post(PORT + '/api/v1/companies/upload', companyformData)
+    axios
+      .post(PORT + '/api/v1/companies/upload', companyformData)
+      .then(() => {
+        toast.success('Upload successful')
+      })
+      .catch(() => {
+        toast.error('Database error, please check correct file format.')
+      })
     handleCloseCompanyFile()
   }
 
@@ -119,8 +134,12 @@ function UploadData() {
       <div className="container-fluid m-0">
         <div className="row">
           {/* Text */}
-          <Card body className="col-9" style={{ fontSize: '20px' }} data-testid="value-student">
-          <BiFolderOpen /> {studentFileName}
+          <Card
+            body
+            className="col-9"
+            style={{ fontSize: '20px' }}
+            data-testid="value-student">
+            <BiFolderOpen /> {studentFileName}
           </Card>
 
           {/* Button to Upload */}
@@ -150,7 +169,11 @@ function UploadData() {
       <div className="container-fluid m-0" style={{ paddingBottom: '100px' }}>
         <div className="row">
           {/* Text */}
-          <Card body className="col-9" style={{ fontSize: '20px' }} data-testid="value-company">
+          <Card
+            body
+            className="col-9"
+            style={{ fontSize: '20px' }}
+            data-testid="value-company">
             <BiFolderOpen /> {companyFileName}
           </Card>
 
