@@ -1,9 +1,10 @@
 const supertest = require('supertest');
 const app = require("../server.js");
 const request = supertest(app);
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
 const os = require("os");
+const Excel = require('exceljs');
 
 describe('student test suite', () => {
 
@@ -140,7 +141,7 @@ describe('student test suite', () => {
     });
 
     test('tests patch /students/generateEmail', async () => {
-        const payload = { email_dir: 'eexports/email', resume_dir: 'eexports/resume', internship_period: '02/12/2023 - 10/12/2024' };
+        let payload = { email_dir: 'eexports/email', resume_dir: 'eexports/resume', internship_period: '02/12/2023 - 10/12/2024' };
         response = await request
             .post('/api/v1/settings')
             .send(payload)
@@ -148,6 +149,27 @@ describe('student test suite', () => {
             .set('Accept', 'application/json');
 
         expect(response.statusCode).toBe(200);
+
+        let payload2 = {
+            "students": [
+                {
+                    "student_id": "S12345670A",
+                    "status": "PENDING_CONFIRMATION",
+                    "company_id": "1"
+                },
+                {
+                    "student_id": "S12345671B",
+                    "status": "PENDING_CONFIRMATION",
+                    "company_id": "2"
+                }
+            ],
+        };
+        let response2 = await request
+                    .patch('/api/v1/students')
+                    .send(payload2)
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+        expect(response2.statusCode).toBe(200);
 
         const userHomeDir = os.homedir();
         expect(fs.existsSync(path.join(userHomeDir, 'eexports/email', '02-12-2023 to 10-12-2024'))).toBe(true);
@@ -158,9 +180,62 @@ describe('student test suite', () => {
             .set('Content-Type', 'application/json')
             .set('Accept', 'application/json');
         expect(response.statusCode).toBe(200);
-        console.log(response.text);
         expect(JSON.parse(response.text).missingResume.length > 0).toBeTruthy();
-
         expect(fs.existsSync(path.join(userHomeDir, 'eexports/email', '02-12-2023 to 10-12-2024', `${JSON.parse(response.text).missingResume[0]}.msg`))).toBe(true);
+    });
+
+    test('test post /students/upload', async() => {
+        const payload = { email_dir: 'eexports/email', resume_dir: 'eexports/resume', internship_period: '02/12/2024 - 10/12/2024' };
+        response = await request
+            .post('/api/v1/settings')
+            .send(payload)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+  
+        expect(response.statusCode).toBe(200);
+  
+        response = await request
+          .post("/api/v1/students/upload")
+          .attach("student",`${__dirname}/mock/StudentData.xlsx`)
+  
+        const userHomeDir = os.homedir();
+        const workbook = new Excel.Workbook();
+        
+        expect(fs.existsSync(path.join(userHomeDir, 'backup/internshipData/students', '02-12-2024 to 10-12-2024','StudentData.xlsx'))).toBe(true);
+  
+        await workbook.xlsx.readFile(path.join(userHomeDir, 'backup/internshipData/students', '02-12-2024 to 10-12-2024','StudentData.xlsx')).then(async()=>{
+          response = await request
+          .get("/api/v1/students")
+          expect(response.body.length).toBe(4)
+        });
+    });
+  
+    test('test post /students/upload missing status', async() => {
+        const payload = { email_dir: 'eexports/email', resume_dir: 'eexports/resume', internship_period: '02/12/2024 - 10/12/2024' };
+        response = await request
+            .post('/api/v1/settings')
+            .send(payload)
+            .set('Content-Type', 'application/json')
+            .set('Accept', 'application/json');
+  
+        expect(response.statusCode).toBe(200);
+  
+        response = await request
+          .post("/api/v1/students/upload")
+          .attach("student",`${__dirname}/mock/StudentData - Missing Status.xlsx`)
+        
+        expect(response.statusCode).toBe(400);
+        expect(response.text).toBe("Missing Headers");
+  
+        const userHomeDir = os.homedir();
+        const workbook = new Excel.Workbook();
+        
+        expect(fs.existsSync(path.join(userHomeDir, 'backup/internshipData/students', '02-12-2024 to 10-12-2024','StudentData - Missing Status.xlsx'))).toBe(true);
+  
+        await workbook.xlsx.readFile(path.join(userHomeDir, 'backup/internshipData/students', '02-12-2024 to 10-12-2024','StudentData - Missing Status.xlsx')).then(async()=>{
+          response = await request
+          .get("/api/v1/students")
+          expect(response.body.length).toBe(4) //supposed to be 8 but since fail, then not updated, so stay as 4
+        });
     });
 });
