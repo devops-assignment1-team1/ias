@@ -1,8 +1,8 @@
-name: Pull Request Review
+name: Pull Request Prod Review
 
 on:
   pull_request:
-    branches: [main]
+    branches: [prod]
     types: [opened, synchronize, reopened]
 jobs:
   frontend-review:
@@ -227,7 +227,7 @@ jobs:
           to: "-827526484"
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
-            Pull request made to main.
+            Pull request made to prod.
 
             PR Owner: ${{ github.actor }}
             PR message: ${{ github.event.pull_request.title }}
