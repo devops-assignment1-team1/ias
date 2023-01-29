@@ -10,6 +10,10 @@ const fs = require("fs");
 const fsExtra = require('fs-extra');
 const os = require("os");
 const userHomeDir = os.homedir();
+const axios = require('axios');
+const Excel = require('exceljs');
+
+
 
 const POST = router.post('/generateEmail', async (req, res) => {
     console.log("/generateEmail (POST)");
@@ -93,4 +97,64 @@ const POST = router.post('/generateEmail', async (req, res) => {
     returnSuccess(res, {missingResume: missingResume});
 });
 
-module.exports = POST;
+// upload student file to directory
+const POSTUPLOAD = router.post("/upload", async(req, res)=>{
+    console.log('/student (POST) Upload')
+    const filename = req.files.student.name;
+    const file = req.files.student
+
+    const system_settings = (await con.promise().query(
+        `SELECT * FROM system_settings`
+    ))[0];
+    let internshipPeriod = system_settings.find(i => i.setting_type === "INTERNSHIP_PERIOD").setting_value
+
+    const uploadPath = path.join(userHomeDir, 'backup/internshipData/students', internshipPeriod.replace("-","to").split("/").join("-"))
+    
+    /* istanbul ignore next */
+    if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    file.mv(path.join(uploadPath, filename),(err)=>{
+        if(err){
+             /* istanbul ignore next */
+             returnError(res, "Error Path");
+             return;
+        }
+        else {
+            const workbook = new Excel.Workbook();
+            workbook.xlsx.readFile(path.join(uploadPath, filename)).then(()=>{
+                let theData = [];
+                let headers = {};
+                workbook.eachSheet((ws,sheetId)=>{
+                    
+                    /* istanbul ignore next */for(let i=1;i<=ws.actualColumnCount; i++){
+                        headers[i]=ws.getRow(1).getCell(i).value;
+                    }
+
+
+                    /* istanbul ignore next */for(let x=2;x<=ws.actualRowCount;x++){
+                        let theRow = {};
+
+                        for(let y=1;y<=ws.actualColumnCount;y++){
+                            theRow[headers[y]] = ws.getRow(x).getCell(y).value
+                        }
+                        theData.push(theRow)
+                    }
+                })
+                if (headers[1] === undefined || headers[2] === undefined || headers[3] === undefined || headers[4]  === undefined) return returnError(res, "Missing Headers");
+                
+                con.query(` DELETE FROM student `)
+
+                theData.forEach(row => {
+                    con.query(
+                        `     
+                        INSERT INTO student(student_id, name, preference, status, company_id) VALUES (?, ? , ? , ? , null);`,
+                        [row["Student ID"], row["Name"] , row["Preference"] , row["Status"].toUpperCase()])
+                });
+                return returnSuccess(res, "Successfully updated & uploaded files");
+            })
+        }
+    })
+})
+
+module.exports = {POST , POSTUPLOAD};
