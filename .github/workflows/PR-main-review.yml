@@ -42,6 +42,8 @@ jobs:
           files: "integrationTest/test_*.py"
       - name: Test with Pytest
         if: steps.check_test_exists.outputs.files_exists == 'true'
+        env:
+          PORT: 5221
         run: |
           #only run pytest when test_*.py exists
           cd integrationTest
