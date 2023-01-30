@@ -28,6 +28,7 @@ jobs:
         run: |
           cd backend
           npm install
+          npm install pm2 -g
       - name: Use Python v3.11
         uses: actions/setup-python@v2
         with:
@@ -56,9 +57,11 @@ jobs:
             done
             sleep 5
             cd ../backend
-            npm start &
+            pm2 stop backend
+            pm2 start npm --name backend -- start
             cd ../frontend
-            npm start &
+            pm2 stop frontend
+            pm2 start npm --name frontend -- start
             sleep 60
             cd ../integrationTest
             pytest $file -v -cov --junitxml=test_report.xml
