@@ -66,6 +66,7 @@ jobs:
               sleep 5
             done
             sleep 5
+            echo $file
             cd ../integrationTest
             pytest $file -v -cov --junitxml=test_report.xml
           done
