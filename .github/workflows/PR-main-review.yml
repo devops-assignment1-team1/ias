@@ -19,6 +19,8 @@ jobs:
           cd frontend
           npm install
           npm start
+      - name: Set up Docker Network
+        run: docker network create -d bridge ias_net
       - name: Build the Docker image
         run: |
           cd database
