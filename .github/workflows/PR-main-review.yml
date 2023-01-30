@@ -58,8 +58,9 @@ jobs:
         if: steps.check_test_exists.outputs.files_exists == 'true'
         run: |
           #only run pytest when test_*.py exists
-          for file in $(find ./integrationTest -name "test_*.py"); do
-            cd database
+          cd integrationTest
+          for file in $(find . -name "test_*.py"); do
+            cd ../database
             docker-compose down --volumes && docker-compose up --build -d
             while ! docker-compose logs | grep "ready for connections"; do
               echo "Waiting for initdb to complete..."
@@ -67,7 +68,7 @@ jobs:
             done
             sleep 5
             echo $file
-            cd ../
+            cd ../integrationTest
             pytest $file -v -cov --junitxml=test_report.xml
           done
       - name: Publish Test Results
