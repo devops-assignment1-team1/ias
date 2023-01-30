@@ -54,6 +54,17 @@ jobs:
         uses: andstor/file-existence-action@v2
         with:
           files: "integrationTest/test_*.py"
+      - name: "Ubuntu Xvfb"
+        if: ${{ matrix.platform == 'ubuntu-latest' }}
+        run: |
+          export DISPLAY=:13.0
+          Xvfb :13 -screen 0 1920x1080x24 > /dev/null 2>&1 &
+          # xauth with complain unless ~/.Xauthority exists
+          touch ~/.Xauthority
+          # To view a listing of the .Xauthority file, enter the following 
+          xauth list
+          # fluxbox 
+          fluxbox &
       - name: Test with Pytest
         if: steps.check_test_exists.outputs.files_exists == 'true'
         run: |
