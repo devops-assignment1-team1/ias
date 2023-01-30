@@ -57,6 +57,7 @@ jobs:
             npm start &
             cd ../frontend
             npm start &
+            sleep 60
             cd ../integrationTest
             pytest $file -v -cov --junitxml=test_report.xml
           done
