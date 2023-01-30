@@ -58,7 +58,7 @@ jobs:
         if: steps.check_test_exists.outputs.files_exists == 'true'
         run: |
           #only run pytest when test_*.py exists
-          for file in $(find . -name "test_*.py"); do
+          for file in $(find ./integrationTest -name "test_*.py"); do
             cd database
             docker-compose down --volumes && docker-compose up --build -d
             while ! docker-compose logs | grep "ready for connections"; do
