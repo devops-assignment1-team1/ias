@@ -67,7 +67,7 @@ jobs:
             done
             sleep 5
             echo $file
-            cd ../integrationTest
+            cd ../
             pytest $file -v -cov --junitxml=test_report.xml
           done
       - name: Publish Test Results
