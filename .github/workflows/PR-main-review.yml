@@ -18,7 +18,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm start
+          npm start &
       - name: Set up Docker Network
         run: docker network create -d bridge ias_net
       - name: Build the Docker image
@@ -41,7 +41,7 @@ jobs:
         run: |
           cd backend
           npm install
-          npm start
+          npm start &
       - name: Use Python v3.11
         uses: actions/setup-python@v2
         with:
