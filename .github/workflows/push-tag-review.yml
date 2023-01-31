@@ -246,7 +246,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release.zip"
-  send-email:
+  send-message:
     runs-on: ubuntu-latest
     name: Send Message
     needs: [create-release]

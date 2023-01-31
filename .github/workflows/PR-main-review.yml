@@ -295,7 +295,7 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
-  send-email:
+  send-message:
     runs-on: ubuntu-latest
     name: Send Message
     needs: [integration-test]
