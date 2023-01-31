@@ -97,7 +97,7 @@ jobs:
           to: "-827526484"
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
-            SQL unit test failed.
+            Backend unit test failed.
 
             PR Owner: ${{ github.actor }}
             PR message: ${{ github.event.pull_request.title }}
