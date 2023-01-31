@@ -172,6 +172,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         with:
+          check_name: "Unit Test Results"
           junit_files: "**/junit.xml"
   sonarcloud:
     runs-on: ubuntu-latest

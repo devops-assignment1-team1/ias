@@ -140,6 +140,29 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+  publish-unit-test:
+    runs-on: ubuntu-latest
+    name: Publish Unit Test Result
+    needs: [frontend-review, backend-review, sql-review]
+    if: always()
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Frontend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend_test_report
+          path: frontend
+      - name: Download Backend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: backend_test_report
+          path: backend
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          check_name: "Unit Test Results"
+          junit_files: "**/junit.xml"
   integration-test:
     runs-on: ubuntu-latest
     name: Integration Test
