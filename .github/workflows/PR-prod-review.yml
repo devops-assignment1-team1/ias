@@ -278,7 +278,7 @@ jobs:
             cd ../backend
             npm start &
             cd ../integrationTest
-            pytest $file -v -cov --junitxml=test_report.xml
+            pytest $file -v -cov --junitxml=${file}_report.xml
           done
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2

@@ -283,14 +283,14 @@ jobs:
             cd ../backend
             npm start &
             cd ../integrationTest
-            pytest $file -v -cov --junitxml=test_report.xml
+            pytest $file -v -cov --junitxml=${file}_report.xml
           done
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         with:
           check_name: "Integration Test Results"
-          junit_files: "integrationTest/test_report.xml"
+          junit_files: "integrationTest/**.xml"
       - name: send telegram message if fail
         uses: appleboy/telegram-action@master
         if: failure()
