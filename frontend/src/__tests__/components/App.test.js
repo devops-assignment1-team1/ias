@@ -12,8 +12,9 @@ test('Render footer', async () => {
     </MemoryRouter>);
 
   // ASSERT
+  const year = String(new Date().getFullYear());
   const footer = screen.container.querySelector('#footer');
-  expect(footer).toHaveTextContent('IAS 2023');
+  expect(footer).toHaveTextContent('IAS ' + year);
 })
 
 test('Render navbar', async () => {

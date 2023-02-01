@@ -174,6 +174,7 @@ function Settings() {
 
             {/* Email directory */}
             <h2 id="email-dir-header" style={{paddingTop:"20px" ,fontFamily: "var(--secondary-font)", fontSize: "20px"}}>Email Directory</h2>
+            <p>Path is relative to user's root directory</p>
             <hr />
             <div className="container-fluid m-0" >
                 <div className="row">
@@ -191,6 +192,7 @@ function Settings() {
 
             {/* Resume directory */}
             <h2 id="resume-dir-header" style={{paddingTop:"20px" ,fontFamily: "var(--secondary-font)", fontSize: "20px"}}>Resume Directory</h2>
+            <p>Path is relative to user's root directory</p>
             <hr />
             <div className="container-fluid m-0">
                 <div className="row">
