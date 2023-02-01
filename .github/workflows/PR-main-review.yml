@@ -46,7 +46,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: "-1803607355"
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Frontend unit test failed.
