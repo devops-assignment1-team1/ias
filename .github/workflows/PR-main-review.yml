@@ -4,6 +4,14 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
+
+env:
+  DEV: -1803607355
+  TECH_LEAD: -1608002629
+  SCRUM_MASTER: -1803030730
+  QA: -1677186538
+  STAKEHOLDER: -1561717719
+
 jobs:
   frontend-review:
     runs-on: ubuntu-latest
@@ -38,7 +46,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.DEV }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Frontend unit test failed.
@@ -94,7 +102,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.DEV }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Backend unit test failed.
@@ -142,7 +150,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.DEV }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             SQL unit test failed.
@@ -209,7 +217,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.DEV }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             SonarQube scan failed.
@@ -287,7 +295,33 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.DEV }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Integration test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Integration test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Integration test failed.
@@ -304,7 +338,19 @@ jobs:
       - name: send telegram message on PR
         uses: appleboy/telegram-action@master
         with:
-          to: "-827526484"
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Pull request made to main.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message on PR
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ env.SCRUM_MASTER }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Pull request made to main.

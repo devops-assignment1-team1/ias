@@ -4,6 +4,14 @@ on:
   pull_request:
     branches: [prod]
     types: [opened, synchronize, reopened]
+
+env:
+  DEV: -1803607355
+  TECH_LEAD: -1608002629
+  SCRUM_MASTER: -1803030730
+  QA: -1677186538
+  STAKEHOLDER: -1561717719
+
 jobs:
   frontend-review:
     runs-on: ubuntu-latest
@@ -38,7 +46,20 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Frontend unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Frontend unit test failed.
@@ -94,7 +115,20 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Backend unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Backend unit test failed.
@@ -142,7 +176,20 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            SQL unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             SQL unit test failed.
@@ -174,54 +221,10 @@ jobs:
         with:
           check_name: "Unit Test Results"
           junit_files: "**/junit.xml"
-  sonarcloud:
-    runs-on: ubuntu-latest
-    name: SonarCloud
-    needs: [frontend-review, backend-review, sql-review]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
-      - name: Download Frontend Coverage Test Result
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend_coverage
-          path: frontend/coverage
-      - name: Download Backend Coverage Test Result
-        uses: actions/download-artifact@v3
-        with:
-          name: backend_coverage
-          path: backend/coverage
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarQube Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        # Force to fail step after specific time.
-        timeout-minutes: 2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: send telegram message if fail
-        uses: appleboy/telegram-action@master
-        if: failure()
-        with:
-          to: "-827526484"
-          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
-          message: |
-            SonarQube scan failed.
-
-            PR Owner: ${{ github.actor }}
-            PR message: ${{ github.event.pull_request.title }}
-            Repository: ${{ github.repository }}
-            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
   integration-test:
     runs-on: ubuntu-latest
     name: Integration Test
-    needs: [sonarcloud]
+    needs: [frontend-review, backend-review, sql-review]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js v16.13.1
@@ -287,10 +290,23 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
-            Integration test failed.
+            Integration unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Integration unit test failed.
 
             PR Owner: ${{ github.actor }}
             PR message: ${{ github.event.pull_request.title }}
@@ -301,13 +317,53 @@ jobs:
     name: Send Message
     needs: [integration-test]
     steps:
-      - name: send telegram message on PR
+      - name: send telegram message if fail
         uses: appleboy/telegram-action@master
+        if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
-            Pull request made to prod.
+            PR made to prod.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            PR made to prod.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.SCRUM_MASTER }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            PR made to prod.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.STAKE_HOLDER }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            PR made to prod.
 
             PR Owner: ${{ github.actor }}
             PR message: ${{ github.event.pull_request.title }}
