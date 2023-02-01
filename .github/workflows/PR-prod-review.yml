@@ -6,11 +6,11 @@ on:
     types: [opened, synchronize, reopened]
 
 env:
-  DEV: "-1803607355"
-  TECH_LEAD: "-1608002629"
-  SCRUM_MASTER: "-1803030730"
-  QA: "-1677186538"
-  STAKEHOLDER: "-1561717719"
+  DEV: "-866127553"
+  TECH_LEAD: "-888958849"
+  SCRUM_MASTER: "-650402871"
+  QA: "-787967941"
+  STAKEHOLDER: "-847258903"
 
 jobs:
   frontend-review:
