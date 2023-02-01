@@ -42,6 +42,7 @@ test('Render email directory header', async () => {
     // ASSERT
     const emailHeader = screen.container.querySelector('#email-dir-header');
     expect(emailHeader).toHaveTextContent('Email Directory');
+    expect(emailHeader.nextElementSibling).toHaveTextContent("Path is relative to user's root directory");
   })
   
   test('Render resume directory header', async () => {
@@ -51,6 +52,7 @@ test('Render email directory header', async () => {
     // ASSERT
     const resumeHeader = screen.container.querySelector('#resume-dir-header');
     expect(resumeHeader).toHaveTextContent('Resume Directory');
+    expect(resumeHeader.nextElementSibling).toHaveTextContent("Path is relative to user's root directory");
   })
   test('Render internship period header', async () => {
     // ARRANGE
@@ -202,10 +204,10 @@ test('Render email directory header', async () => {
 
     const intPeriodUpdateButton = screen.getByTestId('update-period-button')
     fireEvent.click(intPeriodUpdateButton)
-    const dateStart = screen.getAllByText('1')[1];
-    const dateEnd = screen.getAllByText('28')[1];
-    fireEvent.click(dateStart)
-    fireEvent.click(dateStart)
+    // const dateStart = screen.getAllByText('1')[1];
+    const dateEnd = screen.getAllByText('28')[0];
+    // fireEvent.click(dateStart)
+    // fireEvent.click(dateStart)
     fireEvent.click(dateEnd)
     const intConfirmButton = screen.getByTestId('confirm-internship-period')
     fireEvent.click(intConfirmButton)
