@@ -5,6 +5,13 @@ on:
     tags:
       - "v*.*.*"
 
+env:
+  DEV: "-866127553"
+  TECH_LEAD: "-888958849"
+  SCRUM_MASTER: "-650402871"
+  QA: "-787967941"
+  STAKEHOLDER: "-847258903"
+
 jobs:
   frontend-review:
     runs-on: ubuntu-latest
@@ -33,7 +40,20 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Frontend unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Frontend unit test failed.
@@ -83,10 +103,23 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
-            SQL unit test failed.
+            Backend unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Backend unit test failed.
 
             PR Owner: ${{ github.actor }}
             PR message: ${{ github.event.pull_request.title }}
@@ -131,7 +164,7 @@ jobs:
         uses: appleboy/telegram-action@master
         if: failure()
         with:
-          to: "-827526484"
+          to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             SQL unit test failed.
@@ -140,12 +173,133 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            SQL unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+  publish-unit-test:
+    runs-on: ubuntu-latest
+    name: Publish Unit Test Result
+    needs: [frontend-review, backend-review, sql-review]
+    if: always()
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Frontend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend_test_report
+          path: frontend
+      - name: Download Backend Unit Test Result
+        uses: actions/download-artifact@v3
+        with:
+          name: backend_test_report
+          path: backend
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          check_name: "Unit Test Results"
+          junit_files: "**/junit.xml"
   integration-test:
     runs-on: ubuntu-latest
     name: Integration Test
     needs: [frontend-review, backend-review, sql-review]
     steps:
       - uses: actions/checkout@v3
+      - name: Use Node.js v16.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.1
+      - name: Install Frontend Node Packages
+        run: |
+          cd frontend
+          npm install
+      - name: Set up Docker Network
+        run: docker network create -d bridge ias_net
+      - name: Use Node.js v16.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.13.1
+      - name: Install Backend Node Packages
+        run: |
+          cd backend
+          npm install
+      - name: Use Python v3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+      - name: Install Libraries
+        run: |
+          pip install pytest pytest-cov webdriver-manager selenium
+      - name: Check Test Files Existence
+        id: check_test_exists
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "integrationTest/test_*.py"
+      - name: Test with Pytest
+        if: steps.check_test_exists.outputs.files_exists == 'true'
+        env:
+          PORT: 5221
+        run: |
+          #only run pytest when test_*.py exists
+          cd frontend
+          npm start &
+          sleep 60
+          cd ../integrationTest
+          for file in $(find . -name "test_*.py"); do
+            cd ../database
+            docker-compose down --volumes && docker-compose up --build -d
+            while ! docker-compose logs | grep "ready for connections"; do
+              echo "Waiting for initdb to complete..."
+              sleep 5
+            done
+            sleep 5
+            cd ../backend
+            npm start &
+            cd ../integrationTest
+            pytest $file -v -cov --junitxml=${file}_report.xml
+          done
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        if: always()
+        with:
+          check_name: "Integration Test Results"
+          junit_files: "integrationTest/test_report.xml"
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Integration unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
+      - name: send telegram message if fail
+        uses: appleboy/telegram-action@master
+        if: failure()
+        with:
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Integration unit test failed.
+
+            PR Owner: ${{ github.actor }}
+            PR message: ${{ github.event.pull_request.title }}
+            Repository: ${{ github.repository }}
+            See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
   create-release:
     name: Create Release
     needs: [integration-test]
@@ -174,7 +328,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "release.zip"
-  send-email:
+  send-message:
     runs-on: ubuntu-latest
     name: Send Message
     needs: [create-release]
@@ -182,7 +336,37 @@ jobs:
       - name: send telegram message on PR
         uses: appleboy/telegram-action@master
         with:
-          to: "-827526484"
+          to: ${{ env.TECH_LEAD }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Release ${{ github.ref_name }} made.
+
+            Repository: ${{ github.repository }}
+            Download Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+      - name: send telegram message on PR
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ env.QA }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Release ${{ github.ref_name }} made.
+
+            Repository: ${{ github.repository }}
+            Download Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+      - name: send telegram message on PR
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ env.SCRUM_MASTER }}
+          token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
+          message: |
+            Release ${{ github.ref_name }} made.
+
+            Repository: ${{ github.repository }}
+            Download Release: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+      - name: send telegram message on PR
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ env.STAKEHOLDER }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             Release ${{ github.ref_name }} made.
