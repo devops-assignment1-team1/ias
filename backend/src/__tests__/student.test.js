@@ -141,7 +141,7 @@ describe('student test suite', () => {
     expect(response.text).toBe('Database Error')
   })
 
-  test('tests patch /students/generateEmail', async () => {
+  test('tests post /students/generateEmail', async () => {
     let payload = {
       email_dir: 'eexports/email',
       resume_dir: 'eexports/resume',
