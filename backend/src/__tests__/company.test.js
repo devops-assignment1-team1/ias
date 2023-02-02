@@ -40,7 +40,7 @@ describe('company test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/companies',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'CompanyData.xlsx'
         )
       )
@@ -51,7 +51,7 @@ describe('company test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/companies',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'CompanyData.xlsx'
         )
       )
@@ -90,7 +90,7 @@ describe('company test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/companies',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'CompanyData - Missing Contact.xlsx'
         )
       )
@@ -101,7 +101,7 @@ describe('company test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/companies',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'CompanyData - Missing Contact.xlsx'
         )
       )

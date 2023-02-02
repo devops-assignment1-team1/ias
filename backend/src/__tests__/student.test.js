@@ -270,7 +270,7 @@ describe('student test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/students',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'StudentData.xlsx'
         )
       )
@@ -281,7 +281,7 @@ describe('student test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/students',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'StudentData.xlsx'
         )
       )
@@ -320,7 +320,7 @@ describe('student test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/students',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'StudentData - Missing Status.xlsx'
         )
       )
@@ -331,7 +331,7 @@ describe('student test suite', () => {
         path.join(
           userHomeDir,
           'backup/internshipData/students',
-          '02-12-2024 to 10-12-2024',
+          '02-12-2023 to 10-12-2024',
           'StudentData - Missing Status.xlsx'
         )
       )
