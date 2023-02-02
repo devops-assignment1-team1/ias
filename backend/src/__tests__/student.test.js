@@ -53,9 +53,7 @@ describe('student test suite', () => {
 
     expect(statuses.length === 0).toBeTruthy()
   })
-  // constraint violated
-  // Missing Students
-  // Student array is empty
+
   test('tests patch /students endpoint', async () => {
     const payload = {
       students: [
@@ -204,13 +202,53 @@ describe('student test suite', () => {
         )
       )
     ).toBe(true)
+
+    try {
+      fs.unlinkSync(
+        path.join(
+          userHomeDir,
+          'eexports/resume',
+          '02-12-2023 to 10-12-2024',
+          'Student 1.pdf'
+        )
+      )
+    } catch {}
+
+    fs.copyFileSync(
+      `${__dirname}/mock/Student 1.pdf`,
+      path.join(
+        userHomeDir,
+        'eexports/resume',
+        '02-12-2023 to 10-12-2024',
+        'Student 1.pdf'
+      )
+    )
+
+    var response = await request
+      .post('/api/v1/students/generateEmail')
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+    expect(response.statusCode).toBe(200)
+    expect(
+      JSON.parse(response.text).missingResume.includes('Student 1')
+    ).toBeFalsy()
+    expect(
+      fs.existsSync(
+        path.join(
+          userHomeDir,
+          'eexports/email',
+          '02-12-2023 to 10-12-2024',
+          `${JSON.parse(response.text).missingResume[0]}.msg`
+        )
+      )
+    ).toBe(true)
   })
 
   test('test post /students/upload', async () => {
     const payload = {
       email_dir: 'eexports/email',
       resume_dir: 'eexports/resume',
-      internship_period: '02/12/2024 - 10/12/2024'
+      internship_period: '02/12/2023 - 10/12/2024'
     }
     response = await request
       .post('/api/v1/settings')
@@ -257,7 +295,7 @@ describe('student test suite', () => {
     const payload = {
       email_dir: 'eexports/email',
       resume_dir: 'eexports/resume',
-      internship_period: '02/12/2024 - 10/12/2024'
+      internship_period: '02/12/2023 - 10/12/2024'
     }
     response = await request
       .post('/api/v1/settings')
