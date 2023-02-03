@@ -12,10 +12,10 @@ function MatchStudent() {
 
   useEffect(() => {
     // get students
-    var myHeaders = new Headers();
+    const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
+    const requestOptions = {
         method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
@@ -62,13 +62,13 @@ function MatchStudent() {
   }
 
   function handleCompanyChange(student_id, company_id){
-    var status;
+    let status;
 
     // get students status
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
+    let requestOptions = {
         method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
@@ -88,13 +88,13 @@ function MatchStudent() {
   }
 
   function handleStatusChange(student_id, status){
-    var company_id;
+    let company_id;
 
     // get students company
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
+    let requestOptions = {
         method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
@@ -138,7 +138,6 @@ function MatchStudent() {
           {/* Table Body */}
           <tbody>
             {studentData.map((sdata) => {
-              console.log(sdata.company_id)
               return (<tr key={sdata.student_id}>
                 <td>{sdata.name}</td>
                 <td>{sdata.preference}</td>

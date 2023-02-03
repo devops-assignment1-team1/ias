@@ -112,16 +112,16 @@ function Settings() {
     // Toast, reset states, upsert data
     function handleSave(){  
         // upsert data
-        var myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         
-        var raw = JSON.stringify({
+        const raw = JSON.stringify({
           "email_dir": emailPath,
           "resume_dir": resumePath,
           "internship_period": internshipPeriod
         });
         
-        var requestOptions = {
+        const requestOptions = {
           method: 'POST',
           headers: myHeaders,
           body: raw,
