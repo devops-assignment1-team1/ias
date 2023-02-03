@@ -59,6 +59,7 @@ describe('company test suite', () => {
         response = await request.get('/api/v1/companies')
         expect(response.body.length).toBe(3)
 
+        // Update id so that student test wont fail
         await con
           .promise()
           .query(
@@ -119,17 +120,6 @@ describe('company test suite', () => {
       .then(async () => {
         response = await request.get('/api/v1/companies')
         expect(response.body.length).toBe(3) //supposed to be 6 but since fail, then not updated, so stay as 3
-
-        await con
-          .promise()
-          .query(
-            `UPDATE company SET company_id = 1 ORDER BY company_id DESC LIMIT 1`
-          )
-        await con
-          .promise()
-          .query(
-            `UPDATE company SET company_id = 2 ORDER BY company_id DESC LIMIT 1`
-          )
       })
   })
 })
