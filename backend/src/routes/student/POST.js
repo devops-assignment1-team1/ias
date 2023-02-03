@@ -50,7 +50,6 @@ const POST = router.post('/generateEmail', async (req, res) => {
     return
   }
 
-  let success = true
   const missingResume = []
   for (const student of students) {
     const companyRecipient = new msg.Recipient()
@@ -101,7 +100,6 @@ const POST = router.post('/generateEmail', async (req, res) => {
     } catch (e) {
       missingResume.push(student.name)
       console.log(`Resume for ${student.name} not found`)
-      success = false
     }
 
     fs.writeFileSync(
@@ -150,7 +148,6 @@ const POSTUPLOAD = router.post('/upload', async (req, res) => {
     if (err) {
       /* istanbul ignore next */
       returnError(res, 'Error Path')
-      return
     } else {
       const workbook = new Excel.Workbook()
       workbook.xlsx.readFile(path.join(uploadPath, filename)).then(() => {
