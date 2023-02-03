@@ -13,15 +13,15 @@ function PrepareEmail() {
 
   useEffect(() => {
     // get students
-    var myHeaders = new Headers();
+    const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
+    const requestOptions = {
         method: 'GET',
         headers: myHeaders,
         redirect: 'follow'
     };
-    fetch("http://localhost:5222/api/v1/students?status=PENDING_CONFIRMATION", requestOptions) // TODO :: update this
+    fetch("http://localhost:5222/api/v1/students?status=PENDING_CONFIRMATION", requestOptions) 
         .then(response => response.json())
         .then(result => {
           setStudentData(result);
@@ -39,10 +39,10 @@ function PrepareEmail() {
 
   // send email, toast
   function handlePrepareEmail(){
-    var myHeaders = new Headers();
+    const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var requestOptions = {
+    const requestOptions = {
         method: 'POST',
         headers: myHeaders,
         redirect: 'follow'
@@ -101,7 +101,7 @@ function PrepareEmail() {
                 <td>{sdata.preference}</td>
                 <td>
                   {companiesData.map(company => {
-                    var companyName = "";
+                    let companyName = "";
                     if(company.company_id === sdata.company_id){
                       companyName = company.company_name;
                     }
