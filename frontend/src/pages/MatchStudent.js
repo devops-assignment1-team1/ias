@@ -138,7 +138,6 @@ function MatchStudent() {
           {/* Table Body */}
           <tbody>
             {studentData.map((sdata) => {
-              console.log(sdata.company_id)
               return (<tr key={sdata.student_id}>
                 <td>{sdata.name}</td>
                 <td>{sdata.preference}</td>

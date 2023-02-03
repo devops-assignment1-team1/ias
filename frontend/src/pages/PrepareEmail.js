@@ -51,7 +51,6 @@ function PrepareEmail() {
         .then(async(result) => {
           result = await result.json()
           setTitle("Prepare Emails - Email Prepared");
-          // console.log(result.body)
           if (result.missingResume.length === 0){
             toast.success("Email prepared successfully");
           }else{
@@ -60,7 +59,6 @@ function PrepareEmail() {
         })
         .catch(error => {
           toast.error("Error preparing email");
-          console.log(error);
       });
   }
 
