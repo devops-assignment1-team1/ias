@@ -34,10 +34,10 @@ function Settings() {
     
 
     function initData(){
-        var myHeaders = new Headers();
+        let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
     
-        var requestOptions = {
+        let requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
