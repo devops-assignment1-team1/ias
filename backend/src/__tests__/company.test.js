@@ -58,6 +58,17 @@ describe('company test suite', () => {
       .then(async () => {
         response = await request.get('/api/v1/companies')
         expect(response.body.length).toBe(3)
+
+        await con
+          .promise()
+          .query(
+            `UPDATE company SET company_id = 1 ORDER BY company_id DESC LIMIT 1`
+          )
+        await con
+          .promise()
+          .query(
+            `UPDATE company SET company_id = 2 ORDER BY company_id DESC LIMIT 1`
+          )
       })
   })
 
