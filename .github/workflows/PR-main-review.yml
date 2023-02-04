@@ -271,26 +271,23 @@ jobs:
           cd frontend
           npm start &
           sleep 60
-          cd ../integrationTesting
-          for file in $(find . -name "test_*.py"); do
-            cd ../database
-            docker-compose down --volumes && docker-compose up --build -d
-            while ! docker-compose logs | grep "ready for connections"; do
-              echo "Waiting for initdb to complete..."
-              sleep 5
-            done
+          cd ../database
+          docker-compose down --volumes && docker-compose up --build -d
+          while ! docker-compose logs | grep "ready for connections"; do
+            echo "Waiting for initdb to complete..."
             sleep 5
-            cd ../backend
-            npm start &
-            cd ../integrationTesting
-            pytest $file -v -cov --junitxml=${file}_report.xml
           done
+          sleep 5
+          cd ../backend
+          npm start &
+          cd ../integrationTesting
+          pytest -v -cov --junitxml=test_report.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         with:
           check_name: "Integration Test Results"
-          junit_files: "integrationTesting/**.xml"
+          junit_files: "integrationTesting/test_report.xml"
       - name: send telegram message if fail
         uses: appleboy/telegram-action@master
         if: failure()
