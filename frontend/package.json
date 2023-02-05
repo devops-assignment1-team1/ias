@@ -1,50 +1,54 @@
 {
-  "name": "ias-fe-svc",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "bootstrap": "^5.2.3",
-    "history": "^5.3.0",
-    "jest-junit": "^15.0.0",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.7.0",
-    "react-dom": "^18.2.0",
-    "react-dropzone": "^14.2.3",
-    "react-hot-toast": "^2.4.0",
-    "react-icons": "^4.7.1",
-    "react-multi-date-picker": "^3.3.4",
-    "react-router-dom": "^6.6.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "set PORT=5221 && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false --coverage --reporters=default --reporters=jest-junit",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@testing-library/user-event": "^14.4.3",
-    "jest-watch-typeahead": "^0.6.5"
-  }
+	"name": "ias-fe-svc",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^13.4.0",
+		"axios": "^1.2.5",
+		"bootstrap": "^5.2.3",
+		"history": "^5.3.0",
+		"jest-junit": "^15.0.0",
+		"nock": "^13.3.0",
+		"react": "^18.2.0",
+		"react-bootstrap": "^2.7.0",
+		"react-dom": "^18.2.0",
+		"react-dropzone": "^14.2.3",
+		"react-hot-toast": "^2.4.0",
+		"react-icons": "^4.7.1",
+		"react-multi-date-picker": "^3.3.4",
+		"react-router-dom": "^6.6.1",
+		"react-scripts": "5.0.1",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"start": "set PORT=5221 && react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test --watchAll=false --coverage --reporters=default --reporters=jest-junit --transformIgnorePatterns \"node_modules/(?!axios)/\" jest --silent",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"prettier": "prettier-config-standard",
+	"devDependencies": {
+		"@testing-library/user-event": "^14.4.3",
+		"jest-watch-typeahead": "^0.6.5",
+		"prettier-config-standard": "^5.0.0"
+	}
 }
