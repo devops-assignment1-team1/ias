@@ -13,6 +13,7 @@ def test_match_student_prepare_email():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument("--window-size=1920x1080")
     driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()), options=chrome_options)
 
     driver.get("http://localhost:5221/Prepare_Email")
