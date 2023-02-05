@@ -11,9 +11,10 @@ def test_settings_page():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument("--window-size=1920x1080")
     driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()), options=chrome_options)
 
-    driver.get("http://localhost:5221/Settings")
+    driver.get("http://localhost:5223/Settings")
 
     title = driver.title
     assert title == "IAS"
@@ -21,15 +22,6 @@ def test_settings_page():
     driver.implicitly_wait(0.5)
 
     wait = WebDriverWait(driver, 20)
-
-    emailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir-button']")
-    emailDirectoryButton.click()   
-
-    emailDirectoryInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir']")
-    emailDirectoryInput.send_keys("eexports/email")
-
-    confirmEmailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-email-dir']")
-    confirmEmailDirectoryButton.click()   
 
     resumeDirectoryButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.XPATH, "//body/div[@id='root']/div[1]/div[1]/div[3]/div[3]/div[1]/div[2]/button[1]"))))
     resumeDirectoryButton.click()   
@@ -39,6 +31,15 @@ def test_settings_page():
 
     confirmResumeDirectoryButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-resume-dir']"))))
     confirmResumeDirectoryButton.click()
+
+    emailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir-button']")
+    emailDirectoryButton.click()   
+
+    emailDirectoryInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir']")
+    emailDirectoryInput.send_keys("eexports/email")
+
+    confirmEmailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-email-dir']")
+    confirmEmailDirectoryButton.click()   
 
     periodButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='update-period-button']")
     periodButton.click()   
@@ -63,7 +64,7 @@ def test_settings_page():
     confirmResumeDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-internship-period']")
     confirmResumeDirectoryButton.click()
 
-    submitButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='save-btn']")
+    submitButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.CSS_SELECTOR, "[data-testid='save-btn']"))))
     submitButton.click()
     
     #refresh the webpage
