@@ -14,7 +14,7 @@ def test_settings_page():
     chrome_options.add_argument("--window-size=1920x1080")
     driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()), options=chrome_options)
 
-    driver.get("http://localhost:5223/Settings")
+    driver.get("http://localhost:5221/Settings")
 
     title = driver.title
     assert title == "IAS"
