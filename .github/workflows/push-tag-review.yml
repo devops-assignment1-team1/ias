@@ -244,7 +244,7 @@ jobs:
         id: check_test_exists
         uses: andstor/file-existence-action@v2
         with:
-          files: "integrationTest/test_*.py"
+          files: "integrationTesting/test_*.py"
       - name: Test with Pytest
         if: steps.check_test_exists.outputs.files_exists == 'true'
         env:
@@ -254,26 +254,23 @@ jobs:
           cd frontend
           npm start &
           sleep 60
-          cd ../integrationTest
-          for file in $(find . -name "test_*.py"); do
-            cd ../database
-            docker-compose down --volumes && docker-compose up --build -d
-            while ! docker-compose logs | grep "ready for connections"; do
-              echo "Waiting for initdb to complete..."
-              sleep 5
-            done
+          cd ../database
+          docker-compose down --volumes && docker-compose up --build -d
+          while ! docker-compose logs | grep "ready for connections"; do
+            echo "Waiting for initdb to complete..."
             sleep 5
-            cd ../backend
-            npm start &
-            cd ../integrationTest
-            pytest $file -v -cov --junitxml=${file}_report.xml
           done
+          sleep 5
+          cd ../backend
+          npm start &
+          cd ../integrationTesting
+          pytest -v -cov --junitxml=test_report.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
         with:
           check_name: "Integration Test Results"
-          junit_files: "integrationTest/test_report.xml"
+          junit_files: "integrationTesting/test_report.xml"
       - name: send telegram message if fail
         uses: appleboy/telegram-action@master
         if: failure()
