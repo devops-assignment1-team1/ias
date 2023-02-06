@@ -227,7 +227,7 @@ jobs:
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
   integration-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Integration Test
     needs: [sonarcloud]
     steps:
