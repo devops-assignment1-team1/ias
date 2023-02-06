@@ -25,7 +25,7 @@ def test_match_student_prepare_email():
 
     src = os.getcwd() + "/TestData/balqis.pdf"
 
-    dist = str(Path.home()) + "/eexports/resume/24/12/2023 - 24/01/2024"
+    dist = str(Path.home()) + "/eexports/resume/24-12-2023 to 24-01-2024"
 
     shutil.copy(src, dist)
 
