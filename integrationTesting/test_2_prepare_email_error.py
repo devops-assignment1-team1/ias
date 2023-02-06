@@ -29,6 +29,6 @@ def test_prepare_email_no_resume():
     toast = wait.until(EC.element_to_be_clickable((driver.find_element(By.CLASS_NAME, "go3958317564"))))
     toast = toast.text
 
-    assert toast == "Email prepared. Missing resume(s) from Balqis"
+    assert toast == "Email prepared. Missing resume(s) from Student 8"
 
     driver.quit()
