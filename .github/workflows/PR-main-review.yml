@@ -293,7 +293,9 @@ jobs:
       - if: always()
         run: ls ../../../eexports
       - if: always()
-        run: ls ../../../resume
+        run: ls ../../../eexports/resume
+      - if: always()
+        run: ls ../../../eexports/email
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
