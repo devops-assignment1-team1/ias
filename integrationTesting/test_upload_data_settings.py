@@ -10,9 +10,9 @@ import os
 
 def test_uploadData_settings():
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument("--window-size=1920x1080")
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument('--no-sandbox')
+    # chrome_options.add_argument("--window-size=1920x1080")
     driver = webdriver.Chrome(service=ChromeService(executable_path=ChromeDriverManager().install()), options=chrome_options)
 
     driver.get("http://localhost:5221/settings")
@@ -21,6 +21,26 @@ def test_uploadData_settings():
     assert title == "IAS"
 
     driver.implicitly_wait(0.5)
+
+    wait = WebDriverWait(driver, 10)
+
+    resumeDirectoryButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.XPATH, "//body/div[@id='root']/div[1]/div[1]/div[3]/div[3]/div[1]/div[2]/button[1]"))))
+    resumeDirectoryButton.click()   
+
+    resumeDirectoryInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='resume-dir']")
+    resumeDirectoryInput.send_keys("resume")
+
+    confirmResumeDirectoryButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-resume-dir']"))))
+    confirmResumeDirectoryButton.click()
+
+    emailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir-button']")
+    emailDirectoryButton.click()   
+
+    emailDirectoryInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='email-dir']")
+    emailDirectoryInput.send_keys("email")
+
+    confirmEmailDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-email-dir']")
+    confirmEmailDirectoryButton.click()  
 
     
     periodButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='update-period-button']")
@@ -46,10 +66,10 @@ def test_uploadData_settings():
     confirmResumeDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-internship-period']")
     confirmResumeDirectoryButton.click()
 
-    wait = WebDriverWait(driver, 10)
-
     submitButton = wait.until(EC.element_to_be_clickable((driver.find_element(By.CSS_SELECTOR, "[data-testid='save-btn']"))))
     submitButton.click()
+
+    driver.refresh()
 
     driver.get("http://localhost:5221/Upload_Data")
 
