@@ -282,6 +282,8 @@ jobs:
           npm start &
           cd ../integrationTesting
           pytest -v -cov --junitxml=test_report.xml
+      - if: always()
+        run: ls
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
