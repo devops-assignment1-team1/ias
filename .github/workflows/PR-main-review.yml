@@ -282,26 +282,6 @@ jobs:
           npm start &
           cd ../integrationTesting
           pytest -v -cov --junitxml=test_report.xml
-      - if: always()
-        run: ls
-      - if: always()
-        run: ls integrationTesting/TestData
-      - if: always()
-        run: ls ../
-      - if: always()
-        run: ls ../../
-      - if: always()
-        run: ls ../../../
-      - if: always()
-        run: ls ../../../eexports
-      - if: always()
-        run: ls ../../../eexports/resume
-      - if: always()
-        run: ls ../../../eexports/email
-      - if: always()
-        run: ls ../../../eexports/resume/23-07-2023\ to\ 23-08-2023
-      - if: always()
-        run: ls ../../../eexports/email/23-07-2023\ to\ 23-08-2023
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
