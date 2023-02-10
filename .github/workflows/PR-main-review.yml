@@ -285,6 +285,8 @@ jobs:
       - if: always()
         run: ls
       - if: always()
+        run: ls integrationTesting/TestData
+      - if: always()
         run: ls ../
       - if: always()
         run: ls ../../
