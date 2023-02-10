@@ -98,11 +98,7 @@ const POST = router.post('/generateEmail', async (req, res) => {
       attachment.displayName = `${student.name}.pdf`
       message.attachments.push(attachment)
     } catch (e) {
-      missingResume.push(`${student.name}${system_settings
-        .find((i) => i.setting_type === 'INTERNSHIP_PERIOD')
-        .setting_value.replace('-', 'to')
-        .split('/')
-        .join('-')}`)
+      missingResume.push(student.name)
       console.log(`Resume for ${student.name} not found`)
     }
 
