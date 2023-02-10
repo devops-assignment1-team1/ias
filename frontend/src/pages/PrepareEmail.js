@@ -79,7 +79,7 @@ function PrepareEmail() {
         </div>
         <hr />
 
-        <Table striped bordered hover>
+        <Table striped bordered hover id="email-table">
           {/* Table Title */}
           <thead>
             <tr>
