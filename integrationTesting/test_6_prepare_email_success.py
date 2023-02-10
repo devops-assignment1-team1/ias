@@ -23,10 +23,10 @@ def test_match_student_prepare_email():
 
     driver.implicitly_wait(0.5)
 
-    src = os.getcwd() + "/TestData/balqis.pdf"
+    src = os.getcwd() + "/TestData/Balqis.pdf"
     # dist = os.getcwd() + "/TestData/balqi-copy.pdf"
     # dist = "../../../../eexports/resume/23-07-2023 to 23-08-2023"
-    dist = os.path.expanduser("~") + "/eexports/resume/23-07-2023 to 23-08-2023/balqis.pdf"
+    dist = os.path.expanduser("~") + "/eexports/resume/23-07-2023 to 23-08-2023/Balqis.pdf"
     shutil.copy(src, dist)
     # shutil.move(src, dist)
 
