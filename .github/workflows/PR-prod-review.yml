@@ -314,9 +314,8 @@ jobs:
     name: Send Message
     needs: [integration-test]
     steps:
-      - name: send telegram message if fail
+      - name: send telegram message
         uses: appleboy/telegram-action@master
-        if: failure()
         with:
           to: ${{ env.QA }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
@@ -327,9 +326,8 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
-      - name: send telegram message if fail
+      - name: send telegram message
         uses: appleboy/telegram-action@master
-        if: failure()
         with:
           to: ${{ env.TECH_LEAD }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
@@ -340,9 +338,8 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
-      - name: send telegram message if fail
+      - name: send telegram message
         uses: appleboy/telegram-action@master
-        if: failure()
         with:
           to: ${{ env.SCRUM_MASTER }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
@@ -353,9 +350,8 @@ jobs:
             PR message: ${{ github.event.pull_request.title }}
             Repository: ${{ github.repository }}
             See changes: https://github.com/${{ github.repository }}/pull/${{github.event.number}}
-      - name: send telegram message if fail
+      - name: send telegram message
         uses: appleboy/telegram-action@master
-        if: failure()
         with:
           to: ${{ env.STAKE_HOLDER }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
