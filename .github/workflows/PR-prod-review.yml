@@ -353,7 +353,7 @@ jobs:
       - name: send telegram message
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ env.STAKE_HOLDER }}
+          to: ${{ env.STAKEHOLDER }}
           token: "5669366185:AAFQ0KZ61oJxnh73V0Ove0-RiWY4LKbvx5I"
           message: |
             PR made to prod.
