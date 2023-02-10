@@ -297,9 +297,9 @@ jobs:
       - if: always()
         run: ls ../../../eexports/email
       - if: always()
-        run: ls ../../../eexports/resume/23-07-2023 to 23-08-2023
+        run: ls ../../../eexports/resume/23-07-2023\ to\ 23-08-2023
       - if: always()
-        run: ls ../../../eexports/email/23-07-2023 to 23-08-2023
+        run: ls ../../../eexports/email/23-07-2023\ to\ 23-08-2023
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
