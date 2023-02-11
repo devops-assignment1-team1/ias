@@ -18,6 +18,8 @@ jobs:
     name: Frontend Review
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Use Node.js v16.13.1
         uses: actions/setup-node@v3
         with:
@@ -67,6 +69,8 @@ jobs:
     name: Backend Review
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Set up Docker Network
         run: docker network create -d bridge ias_net
       - name: Build the Docker image
@@ -130,6 +134,8 @@ jobs:
     name: SQL Review
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Set up Docker Network
         run: docker network create -d bridge ias_net
       - name: Build the Docker image
@@ -193,6 +199,8 @@ jobs:
     if: always()
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Download Frontend Unit Test Result
         uses: actions/download-artifact@v3
         with:
@@ -215,6 +223,8 @@ jobs:
     needs: [frontend-review, backend-review, sql-review]
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Use Node.js v16.13.1
         uses: actions/setup-node@v3
         with:
@@ -302,8 +312,9 @@ jobs:
     needs: [integration-test]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: prod
       - name: Download Frontend Unit Test Result
         uses: actions/download-artifact@v3
         with:
