@@ -282,6 +282,12 @@ jobs:
           npm start &
           cd ../integrationTesting
           pytest -v -cov --junitxml=test_report.xml
+      - name: Upload Test Report Artifect
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration_test_report
+          path: integrationTesting/test_report.xml
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/composite@v2
         if: always()
