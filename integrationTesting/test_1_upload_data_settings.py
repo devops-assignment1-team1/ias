@@ -46,7 +46,7 @@ def test_uploadData_settings():
     periodButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='update-period-button']")
     periodButton.click() 
 
-    periodInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='update-period-button']")
+    periodInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='int-period']")
     periodInput.send_keys("24/12/2023 - 24/01/2024")  
 
     # driver.implicitly_wait(1)
