@@ -44,24 +44,27 @@ def test_uploadData_settings():
 
     
     periodButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='update-period-button']")
-    periodButton.click()   
+    periodButton.click() 
 
-    driver.implicitly_wait(1)
+    periodInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='int-period']")
+    periodInput.send_keys("24/12/2023 - 24/01/2024")  
 
-    monthSelector = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]")
-    monthSelector.click()  
+    # driver.implicitly_wait(1)
 
-    decemberSelector = driver.find_element(By.XPATH, "//span[contains(text(),'December')]")
-    decemberSelector.click() 
+    # monthSelector = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]")
+    # monthSelector.click()  
 
-    resetClick = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
-    resetClick.click()
+    # decemberSelector = driver.find_element(By.XPATH, "//span[contains(text(),'December')]")
+    # decemberSelector.click() 
 
-    startDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
-    startDate.click()
+    # resetClick = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
+    # resetClick.click()
 
-    endDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[5]/div[4]/span[1]")
-    endDate.click()
+    # startDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
+    # startDate.click()
+
+    # endDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[5]/div[4]/span[1]")
+    # endDate.click()
 
     confirmResumeDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-internship-period']")
     confirmResumeDirectoryButton.click()

@@ -1,3 +1,3 @@
 # Internship Assignment System (IAS)
 
-Our Strategy: https://github.com/DevOps-Team-1-2022/DevOps-Team-1-2022
+Our Strategy: https://github.com/devops-assignment1-team1/ias-docs

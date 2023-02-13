@@ -46,20 +46,25 @@ def test_settings_page():
 
     driver.implicitly_wait(1)
 
-    monthSelector = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]")
-    monthSelector.click()  
+    periodInput = driver.find_element(By.CSS_SELECTOR, "[data-testid='int-period']")
+    periodInput.send_keys("23/07/2023 - 23/08/2023")  
 
-    monthSelector = driver.find_element(By.XPATH, "//span[contains(text(),'July')]")
-    monthSelector.click() 
+    # driver.implicitly_wait(1)
 
-    resetClick = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
-    resetClick.click()
+    # monthSelector = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]")
+    # monthSelector.click()  
 
-    startDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
-    startDate.click()
+    # decemberSelector = driver.find_element(By.XPATH, "//span[contains(text(),'December')]")
+    # decemberSelector.click() 
 
-    endDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[5]/div[4]/span[1]")
-    endDate.click()
+    # resetClick = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
+    # resetClick.click()
+
+    # startDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[6]/div[1]/span[1]")
+    # startDate.click()
+
+    # endDate = driver.find_element(By.XPATH, "//body/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[5]/div[4]/span[1]")
+    # endDate.click()
 
     confirmResumeDirectoryButton = driver.find_element(By.CSS_SELECTOR, "[data-testid='confirm-internship-period']")
     confirmResumeDirectoryButton.click()
