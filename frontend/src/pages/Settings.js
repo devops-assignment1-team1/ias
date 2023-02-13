@@ -3,7 +3,6 @@ import PORT from "../conn";
 
 // Import components
 import toast from 'react-hot-toast';
-import { Calendar } from "react-multi-date-picker";
 import { Title } from '../components/Title/Title';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -24,7 +23,6 @@ function Settings() {
     const [show, setShow] = useState(false); // date picker modal show
     const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
     const [showResumeDir, setShowResumeDir] = useState(false); // input modal show
-    const [value, setValue] = useState(new Date()); // date value
     const [isDisabled, setDisabled] = useState(true); // save changes
 
     // Init states for texts
@@ -72,23 +70,9 @@ function Settings() {
     const handleShow = () => setShow(true);
     const handleClose = () => {
         setShow(false);
-
-        if(value.length === 2){
-            const start = value[0];
-            const end = value[1];
-            
-            // Start date
-            const dayStart = String(start.day).length === 1 ? "0" + String(start.day) : String(start.day);
-            const monthStart = String(start.month.index + 1).length === 1 ? "0" + String(start.month.index + 1) : String(start.month.index + 1);
-            const startStr = dayStart + "/" + monthStart + "/" + String(start.year);
-
-            // End date
-            const dayEnd = String(end.day).length === 1 ? "0" + String(end.day) : String(end.day);
-            const monthEnd = String(end.month.index + 1).length === 1 ? "0" + String(end.month.index + 1) : String(end.month.index + 1);
-            const endStr = dayEnd + "/" + monthEnd + "/" + String(end.year);
-            setInternshipPeriod(startStr + " - " + endStr);
+            setInternshipPeriod(document.getElementById("int-period").value)
             setTitle("Settings - Not Saved");
-        };
+        // };
     };
 
     // Email directory show/hide handler +
@@ -234,7 +218,11 @@ function Settings() {
 
                 {/* Body with date picker */}
                 <Modal.Body>
-                    <Calendar range minDate={new Date()} numberOfMonths={2} value={value} onChange={setValue}/>
+                    <Form.Control
+                        type="text"
+                        id = "int-period"
+                        data-testid="int-period"
+                    />
                 </Modal.Body>
 
                 {/* Confirm selection button */}
