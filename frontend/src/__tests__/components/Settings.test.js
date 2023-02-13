@@ -144,8 +144,6 @@ test('Render email directory header', async () => {
     expect(confirmButton).toBeVisible()
     const input = screen.getByRole('textbox')
     expect(input).toBeVisible()
-    // const input = screen.getAllByText('Sun')
-    // expect(input.length).toBe(2)
   })
 
   test('Save changes button state', async () => {
@@ -157,12 +155,6 @@ test('Render email directory header', async () => {
 
     const intPeriodUpdateButton = screen.getByTestId('update-period-button')
     fireEvent.click(intPeriodUpdateButton)
-    // const dateStart = screen.getAllByText('1')[0];
-    // const dateEnd = screen.getAllByText('31')[0];
-    // fireEvent.click(dateStart)
-    // fireEvent.click(dateEnd)
-    // const intConfirmButton = screen.getByTestId('confirm-internship-period')
-    // fireEvent.click(intConfirmButton)
     
     const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')
     fireEvent.click(emailDirectoryUpdateButton)
@@ -189,20 +181,6 @@ test('Render email directory header', async () => {
   })
 
   test('Save changes post', async () => {
-    // var month = ""; // next month
-    // var year = "";
-    // if(String(new Date().getMonth() + 2).length === 1 ){ // +2 : +1 cos start from 0, +1 to get next month
-    //   month = "0"+ String(new Date().getMonth() + 2);
-    //   year = String(new Date().getFullYear());
-    // }else{
-    //   if(String(new Date().getMonth() + 2) === 13){ // if december, next month is jan
-    //     month = "01";
-    //     year = String(new Date().getFullYear() + 1); // next year
-    //   }else{
-    //     month = String(new Date().getMonth() + 2);
-    //     year = String(new Date().getFullYear());
-    //   }
-    // }
     nock('http://localhost:5222')
         .defaultReplyHeaders({
             'access-control-allow-origin': '*',
@@ -222,16 +200,6 @@ test('Render email directory header', async () => {
     expect(screen.getAllByText("Settings - Saved")[0]).toBeInTheDocument();
 
     const saveBtn = screen.container.querySelector('#save-btn');
-
-    // const intPeriodUpdateButton = screen.getByTestId('update-period-button')
-    // fireEvent.click(intPeriodUpdateButton)
-    // const dateStart = screen.getAllByText('1')[1];
-    // const dateEnd = screen.getAllByText('28')[1];
-    // fireEvent.click(dateStart)
-    // fireEvent.click(dateStart)
-    // fireEvent.click(dateEnd)
-    // const intConfirmButton = screen.getByTestId('confirm-internship-period')
-    // fireEvent.click(intConfirmButton)
     
     
     const emailDirectoryUpdateButton = screen.getByTestId('email-dir-button')

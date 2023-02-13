@@ -3,7 +3,6 @@ import PORT from "../conn";
 
 // Import components
 import toast from 'react-hot-toast';
-import { Calendar } from "react-multi-date-picker";
 import { Title } from '../components/Title/Title';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -24,7 +23,6 @@ function Settings() {
     const [show, setShow] = useState(false); // date picker modal show
     const [showEmailDir, setShowEmailDir] = useState(false); // input modal show
     const [showResumeDir, setShowResumeDir] = useState(false); // input modal show
-    const [value, setValue] = useState(new Date()); // date value
     const [isDisabled, setDisabled] = useState(true); // save changes
 
     // Init states for texts
